@@ -112,11 +112,170 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
  * loads and decorates the header, mainly the nav
  * @param {Element} block The header block element
  */
+/**
+ * Turns a placeholder paragraph whose text is "Search" into a search form.
+ * Content stays authorable in nav.plain.html; the form control is built here.
+ * @param {Element} container The nav-tools section
+ */
+function decorateSearch(container) {
+  if (!container) return;
+  const placeholder = [...container.querySelectorAll('p')]
+    .find((p) => p.textContent.trim().toLowerCase() === 'search' && !p.querySelector('a'));
+  if (!placeholder) return;
+
+  const form = document.createElement('form');
+  form.className = 'nav-search';
+  form.setAttribute('role', 'search');
+  form.action = '/us/en/search.html';
+  form.method = 'get';
+
+  const label = document.createElement('label');
+  label.className = 'nav-search-label';
+  label.setAttribute('for', 'nav-search-input');
+  label.textContent = 'Search';
+
+  const input = document.createElement('input');
+  input.type = 'search';
+  input.id = 'nav-search-input';
+  input.name = 'q';
+  input.placeholder = 'Search';
+  input.setAttribute('aria-label', 'Search');
+
+  form.append(label, input);
+  placeholder.replaceWith(form);
+}
+
+/**
+ * Restructures each country row of the locale panel into a grid-friendly shape:
+ * moves the leading flag <img> out of the country-name <p> so it can sit to the
+ * left, spanning the country label and the language-code row (matches the WKND
+ * locale-panel reference: flag | [country name / codes]).
+ * @param {Element} navDrop The locale .nav-drop element
+ */
+function decorateLocalePanel(navDrop) {
+  if (!navDrop) return;
+  const panel = navDrop.querySelector(':scope > ul');
+  // only the locale selector has per-row flags; skip plain nav dropdowns
+  if (!panel || !panel.querySelector(':scope > li > p > img')) return;
+  panel.classList.add('locale-panel');
+  panel.querySelectorAll(':scope > li').forEach((row) => {
+    row.classList.add('locale-row');
+    const label = row.querySelector(':scope > p');
+    const flag = label && label.querySelector('img');
+    if (flag) {
+      flag.classList.add('locale-flag');
+      row.insertBefore(flag, row.firstChild); // flag becomes the grid's left cell
+    }
+    if (label) label.classList.add('locale-country');
+    const codes = row.querySelector(':scope > ul');
+    if (codes) codes.classList.add('locale-codes');
+  });
+}
+
+/**
+ * Builds the Sign In panel (a dark dropdown form) and toggles it when the
+ * "Sign In" link in the utility bar is clicked. The form controls are created
+ * here (per the nav.plain.html contract — the fragment holds only the link).
+ * @param {Element} navUtility The utility-bar section containing the Sign In link
+ * @param {Element} host The element the panel is appended to (nav-wrapper)
+ */
+function decorateSignIn(navUtility, host) {
+  const link = navUtility && navUtility.querySelector('a[href="#sign-in"]');
+  if (!link || !host) return;
+
+  // Replace the fragment's anchor with a real <button> (the fragment can't hold
+  // a <button>, so it's created here). A button is the correct control for
+  // toggling a panel and avoids anchor default-navigation quirks.
+  const trigger = document.createElement('button');
+  trigger.type = 'button';
+  trigger.className = 'sign-in-toggle';
+  trigger.textContent = link.textContent.trim() || 'Sign In';
+  trigger.setAttribute('aria-haspopup', 'dialog');
+  link.replaceWith(trigger);
+
+  const panel = document.createElement('div');
+  panel.className = 'sign-in-panel';
+  panel.setAttribute('aria-hidden', 'true');
+  panel.innerHTML = `
+    <h2 class="sign-in-title">Sign In</h2>
+    <form class="sign-in-form" novalidate>
+      <p class="sign-in-welcome">Welcome Back</p>
+      <label class="sign-in-field">
+        <span class="sr-only">Username</span>
+        <input type="text" name="username" autocomplete="username" placeholder="USERNAME">
+      </label>
+      <label class="sign-in-field">
+        <span class="sr-only">Password</span>
+        <input type="password" name="password" autocomplete="current-password" placeholder="PASSWORD">
+      </label>
+      <a class="sign-in-forgot" href="#forgot-password">Forgot your password?</a>
+      <button type="submit" class="sign-in-submit">Sign In</button>
+    </form>`;
+  host.append(panel);
+
+  const setOpen = (open) => {
+    panel.classList.toggle('is-open', open);
+    panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+    trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (open) {
+      const firstInput = panel.querySelector('input');
+      if (firstInput) firstInput.focus();
+    }
+  };
+
+  trigger.setAttribute('aria-expanded', 'false');
+  // stopPropagation keeps this click from reaching the document outside-click
+  // listener below, so opening the panel can never immediately close it.
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setOpen(!panel.classList.contains('is-open'));
+  });
+
+  // clicks inside the panel should not bubble out and close it
+  panel.addEventListener('click', (e) => e.stopPropagation());
+
+  // close on submit (demo form — no backend) or escape
+  panel.querySelector('form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    setOpen(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Escape' && panel.classList.contains('is-open')) setOpen(false);
+  });
+  // one permanent outside-click listener; closes only when open & click is elsewhere
+  document.addEventListener('click', () => {
+    if (panel.classList.contains('is-open')) setOpen(false);
+  });
+}
+
+/**
+ * Marks list items that contain a nested list as dropdowns and wires click
+ * toggling (used by both the main nav and the locale selector in nav-tools).
+ * @param {Element} container The section to scan
+ */
+function decorateDropdowns(container) {
+  if (!container) return;
+  container.querySelectorAll(':scope .default-content-wrapper > ul > li').forEach((item) => {
+    if (!item.querySelector('ul')) return;
+    item.classList.add('nav-drop');
+    decorateLocalePanel(item);
+    item.addEventListener('click', (e) => {
+      // let clicks on real links inside the open panel navigate
+      if (e.target.closest('a')) return;
+      const expanded = item.getAttribute('aria-expanded') === 'true';
+      container.querySelectorAll('.nav-drop').forEach((d) => d.setAttribute('aria-expanded', 'false'));
+      item.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+    });
+  });
+}
+
 export default async function decorate(block) {
   // load nav as fragment
   const navMeta = getMetadata('nav');
   const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
-  const fragment = await loadFragment(navPath);
+  // dual-fetch: /content/nav (localhost + content-rooted trees) then navPath (production)
+  let fragment = await loadFragment('/content/nav');
+  if (!fragment) fragment = await loadFragment(navPath);
 
   // decorate nav DOM
   block.textContent = '';
@@ -124,21 +283,82 @@ export default async function decorate(block) {
   nav.id = 'nav';
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
 
-  const classes = ['brand', 'sections', 'tools'];
+  // Rebase relative nav images (e.g. images/wknd-logo.svg) against the nav
+  // fragment location so they resolve on any page depth, not the current page.
+  const navBase = new URL('/content/nav', window.location);
+  nav.querySelectorAll('img[src]').forEach((img) => {
+    const src = img.getAttribute('src');
+    if (src && !src.startsWith('/') && !/^https?:|^data:/.test(src)) {
+      img.src = new URL(src, navBase).href;
+    }
+  });
+
+  // 4 sections: utility bar (sign-in + locale), brand (logo), sections (menu), tools (search)
+  const classes = ['utility', 'brand', 'sections', 'tools'];
   classes.forEach((c, i) => {
     const section = nav.children[i];
     if (section) section.classList.add(`nav-${c}`);
   });
 
   const navBrand = nav.querySelector('.nav-brand');
-  const brandLink = navBrand.querySelector('.button');
+  const brandLink = navBrand && navBrand.querySelector('.button');
   if (brandLink) {
     brandLink.className = '';
     brandLink.closest('.button-container').className = '';
   }
 
+  // Convert the logo link into a real <button> that navigates home. The
+  // destination is read from the original link (route not hardcoded); the logo
+  // image is preserved inside the button.
+  const brandAnchor = navBrand && navBrand.querySelector('a');
+  if (brandAnchor) {
+    const href = brandAnchor.getAttribute('href') || '/us/en.html';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'nav-brand-button';
+    btn.setAttribute('aria-label', brandAnchor.getAttribute('title') || 'WKND home');
+    while (brandAnchor.firstChild) btn.append(brandAnchor.firstChild);
+    btn.addEventListener('click', () => {
+      // On the local preview, content is served under a /content/ prefix
+      // (e.g. /content/us/en); production uses the plain path (/us/en.html).
+      let dest = href;
+      if (window.location.pathname.startsWith('/content/')) {
+        dest = `/content${href.replace(/\.html$/, '')}`;
+      }
+      window.location.assign(new URL(dest, window.location).href);
+    });
+    brandAnchor.replaceWith(btn);
+  }
+
+  // utility bar: wire the locale selector dropdown
+  const navUtility = nav.querySelector('.nav-utility');
+  decorateDropdowns(navUtility);
+
   const navSections = nav.querySelector('.nav-sections');
   if (navSections) {
+    // Convert each simple main-nav link into a real <button> (the fragment can
+    // only hold <a>, so the conversion happens here). The button reads its
+    // destination from the original link — routes are never hardcoded — and
+    // opens it on click, honouring target="_blank" for a new window.
+    navSections.querySelectorAll(':scope .default-content-wrapper > ul > li > a').forEach((link) => {
+      if (link.closest('li').querySelector('ul')) return; // leave dropdown triggers alone
+      const href = link.getAttribute('href');
+      const target = link.getAttribute('target');
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'nav-link-button';
+      btn.textContent = link.textContent.trim();
+      if (href) btn.dataset.href = href;
+      if (target) btn.dataset.target = target;
+      btn.addEventListener('click', () => {
+        if (!href) return;
+        const url = new URL(href, window.location).href;
+        if (target === '_blank') window.open(url, '_blank', 'noopener');
+        else window.location.assign(url);
+      });
+      link.replaceWith(btn);
+    });
+
     navSections.querySelectorAll(':scope .default-content-wrapper > ul > li').forEach((navSection) => {
       if (navSection.querySelector('ul')) navSection.classList.add('nav-drop');
       navSection.addEventListener('click', () => {
@@ -150,6 +370,11 @@ export default async function decorate(block) {
       });
     });
   }
+
+  // tools: build the search input and wire the locale selector dropdown
+  const navTools = nav.querySelector('.nav-tools');
+  decorateSearch(navTools);
+  decorateDropdowns(navTools);
 
   // hamburger for mobile
   const hamburger = document.createElement('div');
@@ -168,4 +393,7 @@ export default async function decorate(block) {
   navWrapper.className = 'nav-wrapper';
   navWrapper.append(nav);
   block.append(navWrapper);
+
+  // Sign In panel (built here per the fragment contract; opens on Sign In click)
+  decorateSignIn(navUtility, navWrapper);
 }
