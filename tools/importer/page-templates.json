@@ -91,6 +91,325 @@
           "defaultContent": []
         }
       ]
+    },
+    {
+      "name": "magazine",
+      "urls": [
+        "https://wknd.site/us/en/magazine.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/magazine.html",
+      "coverageGaps": [],
+      "description": "WKND magazine listing page: page title, featured article teaser, 'All Articles' image-list card grid, and a 'Members Only' promo section with heading and text. Global header and footer are experience fragments.",
+      "blocks": [
+        {
+          "name": "columns",
+          "instances": [
+            "main div.teaser.cmp-teaser--featured"
+          ]
+        },
+        {
+          "name": "cards",
+          "instances": [
+            "main div.image-list.list"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "rc2",
+          "name": "Magazine Title",
+          "selector": "main div.title.aem-GridColumn:nth-of-type(1)",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.title.aem-GridColumn:nth-of-type(1)"
+          ]
+        },
+        {
+          "id": "rc3",
+          "name": "Featured Article",
+          "selector": "main div.teaser.cmp-teaser--featured",
+          "style": "highlight",
+          "blocks": [
+            "columns"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc4",
+          "name": "All Articles Title",
+          "selector": "main div.title.cmp-title--underline:nth-of-type(3)",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.title.cmp-title--underline:nth-of-type(3)"
+          ]
+        },
+        {
+          "id": "rc5",
+          "name": "All Articles Grid",
+          "selector": "main div.image-list.list",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc6",
+          "name": "Members Only Title",
+          "selector": "main div.title.cmp-title--underline:nth-of-type(5)",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.title.cmp-title--underline:nth-of-type(5)"
+          ]
+        },
+        {
+          "id": "rc7",
+          "name": "Members Only Text",
+          "selector": "main div.text",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.text"
+          ]
+        },
+        {
+          "id": "rc8",
+          "name": "Trailing Separator",
+          "selector": "main div.separator.cmp-separator--space-medium",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.separator.cmp-separator--space-medium"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "adventures",
+      "urls": [
+        "https://wknd.site/us/en/adventures.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/adventures.html",
+      "coverageGaps": [],
+      "description": "WKND adventures listing page: Adventures H1, an intro teaser ('Experience the world with us', image + text), a 'Current Adventures' title, a category tab filter (All/Climbing/Cycling/Skiing/Surfing/Travel) and a 16-card adventures grid. The full listing lives in the active 'All' tab panel; category tabs are a client-side filter over the same content. Global header and footer are experience fragments.",
+      "blocks": [
+        {
+          "name": "columns",
+          "instances": [
+            "main div.teaser.cmp-teaser--hero"
+          ]
+        },
+        {
+          "name": "cards",
+          "instances": [
+            "main div.tabs.panelcontainer .cmp-tabs__tabpanel--active .image-list.list"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "rc2",
+          "name": "Adventures Title",
+          "selector": "main main.cmp-layout-container--fixed:nth-of-type(1)",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main main.cmp-layout-container--fixed:nth-of-type(1)"
+          ]
+        },
+        {
+          "id": "rc3",
+          "name": "Intro Teaser",
+          "selector": "main div.teaser.cmp-teaser--hero",
+          "style": null,
+          "blocks": [
+            "columns"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc4",
+          "name": "Current Adventures Title",
+          "selector": "main div.title.cmp-title--underline",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.title.cmp-title--underline"
+          ]
+        },
+        {
+          "id": "rc5",
+          "name": "Adventures Grid",
+          "selector": "main div.tabs.panelcontainer",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": []
+        }
+      ]
+    },
+    {
+      "name": "faqs",
+      "urls": [
+        "https://wknd.site/us/en/faqs.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/faqs.html",
+      "coverageGaps": [],
+      "description": "WKND FAQs page: FAQs H1, hero image, intro paragraph, an accordion of 7 collapsible Q&A items, and a 'Need more help?' contact section. Global header and footer are experience fragments.",
+      "blocks": [
+        {
+          "name": "accordion",
+          "instances": [
+            "main div.accordion.panelcontainer"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "rc2",
+          "name": "FAQs Title",
+          "selector": "main div.title.cmp-title--underline",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.title.cmp-title--underline"
+          ]
+        },
+        {
+          "id": "rc3",
+          "name": "Hero Image",
+          "selector": "main div.image.aem-GridColumn",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.image.aem-GridColumn"
+          ]
+        },
+        {
+          "id": "rc4",
+          "name": "Intro Paragraph",
+          "selector": "main div.text.aem-GridColumn",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.text.aem-GridColumn"
+          ]
+        },
+        {
+          "id": "rc5",
+          "name": "FAQ Accordion",
+          "selector": "main div.accordion.panelcontainer",
+          "style": null,
+          "blocks": [
+            "accordion"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc6",
+          "name": "Need More Help",
+          "selector": "main div.aem-GridColumn--default--3",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.aem-GridColumn--default--3"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "about-us",
+      "urls": [
+        "https://wknd.site/us/en/about-us.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/about-us.html",
+      "coverageGaps": [],
+      "description": "WKND About Us page: About Us H1, an 'Our Contributors' section (heading + intro + 4 person profile cards), and a 'WKND Guides' section (heading + intro + 3 person profile cards). Each person card = image + name + role + social links. A grouping transformer wraps each run of contributor experience-fragment sections into div.cards-profile--contributors / div.cards-profile--guides. Global header and footer are experience fragments.",
+      "blocks": [
+        {
+          "name": "cards-profile",
+          "instances": [
+            "main div.cards-profile--contributors",
+            "main div.cards-profile--guides"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "rc2",
+          "name": "About Us Title",
+          "selector": "main div.title.aem-GridColumn:not(.cmp-title--underline)",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.title.aem-GridColumn:not(.cmp-title--underline)"
+          ]
+        },
+        {
+          "id": "rc3",
+          "name": "Our Contributors Heading",
+          "selector": "main div.title.cmp-title--underline.aem-GridColumn:first-of-type",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.title.cmp-title--underline.aem-GridColumn:first-of-type"
+          ]
+        },
+        {
+          "id": "rc4",
+          "name": "Contributors Intro",
+          "selector": "main div.text.cmp-text--font-small.aem-GridColumn:first-of-type",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.text.cmp-text--font-small.aem-GridColumn:first-of-type"
+          ]
+        },
+        {
+          "id": "rc4b",
+          "name": "Contributors Grid",
+          "selector": "main div.cards-profile--contributors",
+          "style": null,
+          "blocks": [
+            "cards-profile"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc5",
+          "name": "WKND Guides Heading",
+          "selector": "main div.title.cmp-title--underline.aem-GridColumn:last-of-type",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.title.cmp-title--underline.aem-GridColumn:last-of-type"
+          ]
+        },
+        {
+          "id": "rc6",
+          "name": "Guides Intro",
+          "selector": "main div.text.cmp-text--font-small.aem-GridColumn:last-of-type",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.text.cmp-text--font-small.aem-GridColumn:last-of-type"
+          ]
+        },
+        {
+          "id": "rc6b",
+          "name": "Guides Grid",
+          "selector": "main div.cards-profile--guides",
+          "style": null,
+          "blocks": [
+            "cards-profile"
+          ],
+          "defaultContent": []
+        }
+      ]
     }
   ]
 }

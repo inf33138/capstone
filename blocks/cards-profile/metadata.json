@@ -1,0 +1,42 @@
+{
+  "variantName": "cards-profile",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-08-07T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://wknd.site/us/en/about-us.html",
+    "originPage": "WKND US/EN About Us page",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "spacious",
+    "purpose": "team",
+    "imagePattern": "large"
+  },
+  "contentPattern": {
+    "structure": "repeating [profile image] | [name + role + social links] rows",
+    "buttonCount": 3,
+    "imageCount": 1,
+    "itemsObserved": 7
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "team / staff / contributor listings",
+      "author or guide profiles",
+      "people cards with a photo, name, role/title and social links",
+      "'meet the team' sections on light backgrounds"
+    ],
+    "notSuitableFor": [
+      "article / product / adventure card grids (use the plain 'cards' block: image + linked title + description)",
+      "side-by-side text layouts (use columns)",
+      "cards without a photo or without a role subtitle"
+    ]
+  },
+  "notes": "New variant derived from the AEM Block Collection 'cards' block. A DISTINCT name (cards-profile) is required because the project already has a 'cards' block with a different content model (image + linked title + description, no role subtitle, no social row). Content model: first row = block name; each subsequent row = 2 cells [profile image] | [name (h3) + role subtitle + 3 social links]. Decoration converts rows to <ul><li>, sets the single-picture cell to .cards-profile-card-image and the text cell to .cards-profile-card-body, tags the non-link paragraph as .cards-profile-card-role, and gathers the social <a> elements into a .cards-profile-social row (labels Facebook/Twitter/Instagram; placeholder hrefs preserved). Adapted for this stripped @adobe/aem-boilerplate: the vanilla 'moveInstrumentation' import and its calls were REMOVED because scripts.js does not export it in this doc project (only createOptimizedPicture from aem.js is imported). Used by both the Contributors grid (4 cards) and the Guides grid (3 cards) - one variant, two instances.",
+  "usage": {
+    "pagesUsing": ["/us/en/about-us"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-07T00:00:00.000Z"
+  }
+}

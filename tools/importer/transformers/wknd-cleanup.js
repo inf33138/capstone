@@ -20,6 +20,15 @@
  *  - #mobileNav      mobile navigation drawer                      [cleaned.html:574]
  *  - iframe          Adobe ID-syncing iframe (demdex)              [cleaned.html:566]
  *  - meta            stray <meta> tags left inside cmp-image wraps  [cleaned.html:183,204,227,271,334,378]
+ *
+ * Tabbed category filter (adventures page): the "Current Adventures" grid is
+ * wrapped in a `div.tabs.panelcontainer` whose active "All" tab panel holds the
+ * complete card grid, while the other tab panels (Climbing/Cycling/Skiing/…)
+ * duplicate a subset of those same cards. Before block parsing we strip the tab
+ * UI so only the active panel's grid remains: remove the `.cmp-tabs__tablist`
+ * (the "All/Climbing/…" labels) and every tab panel that is NOT
+ * `.cmp-tabs__tabpanel--active`. The cards parser then converts the surviving
+ * active-panel grid, giving one clean, de-duplicated adventures listing.
  */
 
 const TransformHook = {
@@ -28,6 +37,14 @@ const TransformHook = {
 };
 
 export default function transform(hookName, element, payload) {
+  if (hookName === TransformHook.beforeTransform) {
+    // Strip tabbed-filter chrome so only the active "All" panel's grid survives
+    // into block parsing (avoids duplicate category cards + stray tab labels).
+    // Guarded to the tabs component, so pages without tabs are unaffected.
+    element.querySelectorAll('.tabs.panelcontainer .cmp-tabs__tablist').forEach((el) => el.remove());
+    element.querySelectorAll('.tabs.panelcontainer .cmp-tabs__tabpanel:not(.cmp-tabs__tabpanel--active)').forEach((el) => el.remove());
+  }
+
   if (hookName === TransformHook.afterTransform) {
     // Non-authorable global chrome + page-shell artifacts. Removed after block
     // parsing; none of these match the WKND block selectors, so parsing is

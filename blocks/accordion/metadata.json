@@ -1,0 +1,42 @@
+{
+  "variantName": "accordion",
+  "baseBlock": "accordion",
+  "version": "1.0.0",
+  "created": "2026-08-07T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://wknd.site/us/en/faqs.html",
+    "originPage": "WKND US/EN FAQs page",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "compact",
+    "purpose": "faq",
+    "imagePattern": "noimg"
+  },
+  "contentPattern": {
+    "structure": "repeating [question] | [answer] rows",
+    "buttonCount": 0,
+    "imageCount": 0,
+    "itemsObserved": 7
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "FAQ pages",
+      "question-and-answer sections",
+      "collapsible/expandable text content on light backgrounds",
+      "compacting a long list of topics into toggled panels"
+    ],
+    "notSuitableFor": [
+      "content that should always be fully visible without interaction",
+      "tabbed content switchers (use tabs instead)",
+      "grids of distinct items with images (use cards instead)"
+    ]
+  },
+  "notes": "Created from the AEM Block Collection 'accordion' block. Standard project naming (plain 'accordion', matching cards/columns/hero convention) per the migration task directive. Adapted for this stripped @adobe/aem-boilerplate: the vanilla 'moveInstrumentation' import/call was removed (scripts.js does not export it in this doc project). Content model: first row = block name; each subsequent row = 2 cells [question label] | [answer body]. JS wraps each row in a native <details>/<summary>.",
+  "usage": {
+    "pagesUsing": ["/us/en/faqs"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-07T00:00:00.000Z"
+  }
+}

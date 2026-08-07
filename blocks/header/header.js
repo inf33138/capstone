@@ -386,18 +386,25 @@ export default async function decorate(block) {
     navSections.querySelectorAll(':scope .default-content-wrapper > ul > li > a').forEach((link) => {
       if (link.closest('li').querySelector('ul')) return; // leave dropdown triggers alone
       const href = link.getAttribute('href');
-      const target = link.getAttribute('target');
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'nav-link-button';
       btn.textContent = link.textContent.trim();
       if (href) btn.dataset.href = href;
-      if (target) btn.dataset.target = target;
+      // Main nav items are primary destinations — always navigate in the same
+      // tab (ignore any authored target="_blank") so every item behaves
+      // consistently, e.g. Magazine -> the magazine page.
       btn.addEventListener('click', () => {
         if (!href) return;
-        const url = new URL(href, window.location).href;
-        if (target === '_blank') window.open(url, '_blank', 'noopener');
-        else window.location.assign(url);
+        // On the local preview, content is served under a /content/ prefix
+        // (e.g. /content/us/en/magazine); production uses the plain path
+        // (/us/en/magazine.html). Rebase same-origin routes so they resolve
+        // in both environments (mirrors the brand/logo button behaviour).
+        let dest = href;
+        if (href.startsWith('/') && window.location.pathname.startsWith('/content/')) {
+          dest = `/content${href.replace(/\.html$/, '')}`;
+        }
+        window.location.assign(new URL(dest, window.location).href);
       });
       link.replaceWith(btn);
     });
