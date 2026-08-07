@@ -316,8 +316,13 @@ export default async function decorate(block) {
   // load nav as fragment
   const navMeta = getMetadata('nav');
   const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
-  // dual-fetch: /content/nav (localhost + content-rooted trees) then navPath (production)
-  let fragment = await loadFragment('/content/nav');
+  // The local dev server serves content under a /content/ prefix (e.g.
+  // /content/us/en), where the fragment lives at /content/nav. Preview/live
+  // serve it at /nav. Only try the /content/ path when we're actually on the
+  // content-prefixed dev environment — otherwise fetching it on preview/live
+  // just produces a noisy 404 before the fallback succeeds.
+  const onContentPrefix = window.location.pathname.startsWith('/content/');
+  let fragment = onContentPrefix ? await loadFragment('/content/nav') : null;
   if (!fragment) fragment = await loadFragment(navPath);
 
   // decorate nav DOM
@@ -328,7 +333,8 @@ export default async function decorate(block) {
 
   // Rebase relative nav images (e.g. images/wknd-logo.svg) against the nav
   // fragment location so they resolve on any page depth, not the current page.
-  const navBase = new URL('/content/nav', window.location);
+  // Use the same base the fragment loaded from (content-prefixed on dev).
+  const navBase = new URL(onContentPrefix ? '/content/nav' : navPath, window.location);
   nav.querySelectorAll('img[src]').forEach((img) => {
     const src = img.getAttribute('src');
     if (src && !src.startsWith('/') && !/^https?:|^data:/.test(src)) {
