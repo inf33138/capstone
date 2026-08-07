@@ -1,8 +1,9 @@
 import { getMetadata } from '../../scripts/aem.js';
 import { loadFragment } from '../fragment/fragment.js';
 
-// media query match that indicates mobile/tablet width
-const isDesktop = window.matchMedia('(min-width: 900px)');
+// media query match that indicates desktop width (WKND switches at 1200px;
+// below this the header uses the mobile hamburger navigation)
+const isDesktop = window.matchMedia('(min-width: 1200px)');
 
 function closeOnEscape(e) {
   if (e.code === 'Escape') {
@@ -269,6 +270,48 @@ function decorateDropdowns(container) {
   });
 }
 
+/**
+ * Adds scroll-reactive state classes to the fixed header:
+ * - `is-scrolled`: past 50px (solid background + shadow)
+ * - `is-shrunk`:   scrolling down (compact header)
+ * removing `is-shrunk` when scrolling up (expanded header)
+ * @param {Element} navWrapper The fixed header wrapper element
+ */
+function decorateScrollBehavior(navWrapper) {
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+
+  const update = () => {
+    const currentY = window.scrollY;
+
+    // solid + shadow after 50px
+    navWrapper.classList.toggle('is-scrolled', currentY > 50);
+
+    // shrink when scrolling down (past a small threshold), expand when up.
+    // never shrink while near the top so the full header is always shown there.
+    if (currentY <= 50) {
+      navWrapper.classList.remove('is-shrunk');
+    } else if (currentY > lastScrollY + 4) {
+      navWrapper.classList.add('is-shrunk');
+    } else if (currentY < lastScrollY - 4) {
+      navWrapper.classList.remove('is-shrunk');
+    }
+
+    lastScrollY = currentY;
+    ticking = false;
+  };
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // set the initial state (e.g. when loaded already scrolled)
+  update();
+}
+
 export default async function decorate(block) {
   // load nav as fragment
   const navMeta = getMetadata('nav');
@@ -396,4 +439,8 @@ export default async function decorate(block) {
 
   // Sign In panel (built here per the fragment contract; opens on Sign In click)
   decorateSignIn(navUtility, navWrapper);
+
+  // Sticky scroll behavior: solid + shadow past 50px, shrink on scroll-down,
+  // expand on scroll-up. Runs inside requestAnimationFrame to stay smooth.
+  decorateScrollBehavior(navWrapper);
 }
