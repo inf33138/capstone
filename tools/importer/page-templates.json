@@ -1,0 +1,96 @@
+{
+  "metadata": {
+    "projectType": "doc"
+  },
+  "templates": [
+    {
+      "name": "homepage",
+      "urls": [
+        "https://wknd.site/us/en.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en.html",
+      "coverageGaps": [],
+      "description": "WKND US/EN homepage: hero carousel, featured article teaser, recent articles card grid, featured adventure teaser, adventures card grid. Global header and footer are experience fragments.",
+      "blocks": [
+        {
+          "name": "carousel-hero",
+          "instances": [
+            "div.carousel.cmp-carousel--hero"
+          ]
+        },
+        {
+          "name": "columns",
+          "instances": [
+            "div.teaser.cmp-teaser--featured"
+          ],
+          "section": "highlight"
+        },
+        {
+          "name": "cards",
+          "instances": [
+            "main.cmp-layout-container--fixed:nth-of-type(1) div.image-list.list",
+            "main.cmp-layout-container--fixed:nth-of-type(2) div.image-list.list"
+          ]
+        },
+        {
+          "name": "hero",
+          "instances": [
+            "div.teaser.cmp-teaser--hero.cmp-teaser--imagebottom"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "rc2",
+          "name": "Hero Carousel",
+          "selector": "div.carousel.cmp-carousel--hero",
+          "style": null,
+          "blocks": [
+            "carousel-hero"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc3",
+          "name": "Featured Article",
+          "selector": "div.teaser.cmp-teaser--featured",
+          "style": "highlight",
+          "blocks": [
+            "columns"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc5",
+          "name": "Recent Articles",
+          "selector": "main.cmp-layout-container--fixed:nth-of-type(1) div.image-list.list",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc9",
+          "name": "Featured Adventure",
+          "selector": "div.teaser.cmp-teaser--hero.cmp-teaser--imagebottom",
+          "style": null,
+          "blocks": [
+            "hero"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc11",
+          "name": "Adventures Grid",
+          "selector": "main.cmp-layout-container--fixed:nth-of-type(2) div.image-list.list",
+          "style": null,
+          "blocks": [
+            "cards"
+          ],
+          "defaultContent": []
+        }
+      ]
+    }
+  ]
+}

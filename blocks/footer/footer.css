@@ -1,20 +1,119 @@
+/* stylelint-disable no-descending-specificity */
+
+/* WKND footer: dark bar with logo, nav, social icons, and legal text */
+
 footer {
-  background-color: var(--light-color);
-  font-size: var(--body-font-size-xs);
+  background-color: #202020;
+  color: #ebebeb;
+  font-size: 14px;
 }
 
-footer .footer > div {
-  margin: auto;
+footer .footer {
   max-width: 1200px;
-  padding: 40px 24px 24px;
+  margin: auto;
+  padding: 40px 24px;
+  text-align: center;
 }
 
 footer .footer p {
   margin: 0;
 }
 
+footer .footer a:any-link {
+  color: #ebebeb;
+}
+
+footer .footer a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- brand + nav ---------- */
+footer .footer-brand img {
+  width: 128px;
+  height: auto;
+  display: inline-block;
+}
+
+footer .footer-brand ul {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 28px;
+}
+
+footer .footer-brand ul a {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- social ---------- */
+footer .footer-social {
+  margin-top: 28px;
+}
+
+footer .footer-social h4 {
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #ebebeb;
+  margin: 0 0 12px;
+}
+
+footer .footer-social ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+footer .footer-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: #ebebeb;
+  transition: opacity 0.2s ease;
+}
+
+footer .footer-social a:hover {
+  opacity: 0.7;
+}
+
+footer .footer-social img {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+/* ---------- legal / copyright ---------- */
+footer .footer-legal {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid rgb(255 255 255 / 15%);
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+footer .footer-legal p {
+  font-size: 12px;
+  color: #f7f7f7;
+  line-height: 1.6;
+}
+
+footer .footer-legal p + p {
+  margin-top: 12px;
+}
+
 @media (width >= 900px) {
-  footer .footer > div {
-    padding: 40px 32px 24px;
+  footer .footer {
+    padding: 48px 32px;
   }
 }
