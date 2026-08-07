@@ -8,7 +8,8 @@
   --wknd-header-light: #fff;
   --wknd-nav-link: #202020;
   --wknd-utility-height: 25px;
-  --wknd-main-height: 190px;
+  --wknd-main-height: 96px; /* ~48px content + balanced 24px padding top & bottom */
+  --wknd-main-height-shrunk: 72px;
 }
 
 header .nav-wrapper {
@@ -18,13 +19,27 @@ header .nav-wrapper {
   position: fixed;
   top: 0;
   box-shadow: 0 1px 0 rgb(0 0 0 / 8%);
+  transition: box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
+/* solid background + shadow once the page has scrolled past 50px */
+header .nav-wrapper.is-scrolled {
+  background-color: var(--wknd-header-light);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 15%);
+}
+
+
 /* Reserve the fixed header's real height so page content (hero) sits below it,
-   not underneath it. Desktop = utility bar + main bar. */
-@media (width >= 900px) {
+   not underneath it. Desktop = utility bar + main bar. WKND switches to its
+   full desktop header at 1200px; below that it uses the mobile/hamburger nav. */
+@media (width >= 1200px) {
   header {
     height: calc(var(--wknd-utility-height) + var(--wknd-main-height));
+    transition: height 0.3s ease;
+  }
+
+  header:has(.nav-wrapper.is-shrunk) {
+    height: calc(var(--wknd-utility-height) + var(--wknd-main-height-shrunk));
   }
 }
 
@@ -138,7 +153,7 @@ header nav .nav-utility .nav-drop > p img {
 }
 
 /* mobile: show only the flag icon, hide the "en-US" text (keep chevron) */
-@media (width < 900px) {
+@media (width < 1200px) {
   header nav .nav-utility .nav-drop > p {
     gap: 0;
     font-size: 0;
@@ -266,7 +281,7 @@ header .nav-brand {
   padding-left: 24px;
 }
 
-@media (width >= 900px) {
+@media (width >= 1200px) {
   header .nav-brand {
     padding-left: 64px;
   }
@@ -286,6 +301,7 @@ header nav .nav-brand img {
   width: 128px;
   height: auto;
   display: block;
+  transition: width 0.3s ease;
 }
 
 /* ---------- hamburger (mobile only) ---------- */
@@ -467,19 +483,34 @@ header nav .nav-search input::placeholder {
   text-transform: uppercase;
 }
 
-/* ---------- desktop layout ---------- */
-@media (width >= 900px) {
+/* ---------- desktop layout (matches WKND: full header at >= 1200px) ---------- */
+@media (width >= 1200px) {
   header nav {
     grid-template:
       'utility utility utility' var(--wknd-utility-height)
       'brand sections tools' var(--wknd-main-height) / auto 1fr auto;
     align-items: center;
+
+    /* smoothly animate the main bar's row height as the header shrinks/expands */
+    transition: grid-template-rows 0.3s ease;
   }
 
   header nav,
   header nav[aria-expanded='true'] {
     min-height: 0;
     overflow: visible;
+  }
+
+  /* shrink the main bar when scrolling down */
+  header .nav-wrapper.is-shrunk nav {
+    grid-template:
+      'utility utility utility' var(--wknd-utility-height)
+      'brand sections tools' var(--wknd-main-height-shrunk) / auto 1fr auto;
+  }
+
+  /* logo scales down a touch in the shrunk state */
+  header .nav-wrapper.is-shrunk nav .nav-brand img {
+    width: 96px;
   }
 
   header nav .nav-hamburger {
@@ -754,7 +785,7 @@ header .sign-in-form::after {
 }
 
 /* mobile: full-width sheet pinned near the top */
-@media (width < 900px) {
+@media (width < 1200px) {
   header .sign-in-panel {
     top: 0;
     left: 0;
