@@ -1,18 +1,27 @@
 /* stylelint-disable no-descending-specificity */
 
-/* WKND footer: dark bar with logo, nav, social icons, and legal text */
+/* WKND footer (wknd.site): dark bar, left-aligned. Top row holds the logo,
+   nav links, and "Follow Us" + social icons; a full-width divider separates
+   the legal / copyright text below. */
 
 footer {
   background-color: #202020;
   color: #ebebeb;
+  font-family: var(--body-font-family);
   font-size: 14px;
 }
 
 footer .footer {
   max-width: 1200px;
   margin: auto;
-  padding: 40px 24px;
-  text-align: center;
+  padding: 24px;
+  text-align: left;
+}
+
+footer .footer > div {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 footer .footer p {
@@ -36,27 +45,25 @@ footer .footer-brand img {
 
 footer .footer-brand ul {
   list-style: none;
-  margin: 20px 0 0;
+  margin: 12px 0 0;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px 28px;
+  gap: 4px 12px;
 }
 
 footer .footer-brand ul a {
+  display: inline-block;
+  padding: 6px 4px;
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.02em;
 }
 
 /* ---------- social ---------- */
-footer .footer-social {
-  margin-top: 28px;
-}
-
 footer .footer-social h4 {
   font-size: 16px;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   color: #ebebeb;
@@ -68,44 +75,42 @@ footer .footer-social ul {
   margin: 0;
   padding: 0;
   display: flex;
-  justify-content: center;
-  gap: 16px;
+  gap: 0;
 }
 
 footer .footer-social a {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  color: #ebebeb;
-  transition: opacity 0.2s ease;
+  width: 40px;
+  height: 40px;
+  border-radius: 0;
+  background-color: #fff;
+  color: #202020;
+  transition: background-color 0.2s ease;
 }
 
-footer .footer-social a:hover {
-  opacity: 0.7;
+footer .footer-social a:hover,
+footer .footer-social a:focus-visible {
+  background-color: #ffea00;
 }
 
 footer .footer-social img {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   display: block;
 }
 
 /* ---------- legal / copyright ---------- */
 footer .footer-legal {
-  margin-top: 28px;
   padding-top: 20px;
   border-top: 1px solid rgb(255 255 255 / 15%);
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 footer .footer-legal p {
   font-size: 12px;
   color: #f7f7f7;
-  line-height: 1.6;
+  line-height: 1.4;
 }
 
 footer .footer-legal p + p {
@@ -114,6 +119,49 @@ footer .footer-legal p + p {
 
 @media (width >= 900px) {
   footer .footer {
-    padding: 48px 32px;
+    padding: 24px 32px;
+  }
+
+  /* top row: brand + nav on the left, social pushed to the right; legal below */
+  footer .footer > div {
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 24px 40px;
+  }
+
+  footer .footer-brand {
+    flex: 1;
+  }
+
+  footer .footer-brand .default-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+
+  footer .footer-brand .default-content-wrapper > p {
+    margin: 0;
+  }
+
+  footer .footer-brand ul {
+    margin: 0;
+  }
+
+  footer .footer-social .default-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  footer .footer-social {
+    margin-left: auto;
+  }
+
+  footer .footer-social h4 {
+    margin: 0;
+  }
+
+  footer .footer-legal {
+    flex-basis: 100%;
   }
 }

@@ -17,17 +17,87 @@
 
 .columns > div > .columns-img-col img {
   display: block;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* keep the whole Featured Article section on a white background */
+.section.highlight.columns-container {
+  background-color: #fff;
+}
+
+/* WKND "Featured Article" teaser styling: light-gray text panel, serif title,
+   bold pretitle, and a yellow call-to-action button */
+.columns > div > div:not(.columns-img-col) {
+  box-sizing: border-box;
+  padding: 40px 28px;
+  background-color: #ebebeb;
+  color: #202020;
+}
+
+.columns > div > div:not(.columns-img-col) p {
+  font-size: 14px;
+  line-height: 1.75;
+  color: #202020;
+}
+
+.columns > div > div:not(.columns-img-col) > p:first-child {
+  margin: 0 0 12px;
+  font-weight: 700;
+  font-size: 18px;
+  color: #202020;
+}
+
+.columns > div > div:not(.columns-img-col) h2,
+.columns > div > div:not(.columns-img-col) h3 {
+  margin: 0 0 18px;
+  font-family: asar, georgia, 'Times New Roman', times, serif;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.4;
+  color: #202020;
+}
+
+.columns > div > div:not(.columns-img-col) a {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 14px 35px;
+  background: #ffea00;
+  color: #202020;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.columns > div > div:not(.columns-img-col) a:hover {
+  background: #f0dc00;
 }
 
 @media (width >= 900px) {
   .columns > div {
-    align-items: center;
-    flex-direction: unset;
-    gap: 24px;
+    align-items: stretch;
+    flex-direction: row;
+    gap: 0;
   }
 
   .columns > div > div {
     flex: 1;
     order: unset;
+  }
+
+  .columns > div > .columns-img-col {
+    flex: 0 0 62%;
+  }
+
+  .columns > div > div:not(.columns-img-col) {
+    padding: 63px 36px 36px;
+  }
+
+  .columns > div > div:not(.columns-img-col) h2,
+  .columns > div > div:not(.columns-img-col) h3 {
+    font-size: 36px;
+    line-height: 1.5;
   }
 }

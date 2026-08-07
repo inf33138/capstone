@@ -3,35 +3,95 @@
   padding: 0;
 }
 
+/* WKND "Next Adventures" teaser: full-width banner image with a centered white
+   content card that overlaps the bottom of the image */
 .hero {
   position: relative;
-  padding: 40px 24px;
-  min-height: 300px;
-}
-
-.hero h1 {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0;
 }
 
 .hero picture {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  object-fit: cover;
-  box-sizing: border-box;
+  display: block;
+  width: 100%;
 }
 
-.hero img {
-  object-fit: cover;
+.hero picture img {
+  display: block;
   width: 100%;
-  height: 100%;
+  height: 56vw;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* the text column becomes the overlapping white card */
+.hero > div:not(:has(picture)) {
+  z-index: 1;
+  box-sizing: border-box;
+  width: calc(100% - 32px);
+  max-width: 1200px;
+  margin: -48px auto 0;
+  padding: 24px 28px;
+  background-color: #fff;
+  color: #202020;
+  text-align: left;
+}
+
+.hero h1,
+.hero h2,
+.hero h3 {
+  max-width: none;
+  margin: 0;
+  font-family: asar, georgia, 'Times New Roman', times, serif;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.5;
+  color: #202020;
+}
+
+.hero > div:not(:has(picture)) p {
+  margin: 12px 0 0;
+  font-size: 16px;
+  line-height: 1.75;
+  color: #202020;
+}
+
+.hero > div:not(:has(picture)) a {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 14px 35px;
+  background: #ffea00;
+  color: #202020;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.hero > div:not(:has(picture)) a:hover {
+  background: #f0dc00;
 }
 
 @media (width >= 900px) {
-  .hero {
-    padding: 40px 32px;
+  .hero picture img {
+    height: min(44.4vw, calc(100dvh - var(--header-height, 190px)));
+  }
+
+  .hero > div:not(:has(picture)) {
+    margin-top: -180px;
+    padding: 24px 28px 40px;
+  }
+
+  .hero h1,
+  .hero h2,
+  .hero h3 {
+    font-size: 36px;
+  }
+
+  .hero > div:not(:has(picture)) p {
+    font-size: 18px;
   }
 }

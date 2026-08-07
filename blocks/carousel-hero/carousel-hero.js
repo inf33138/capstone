@@ -16,7 +16,7 @@ function updateActiveSlide(slide) {
     });
   });
 
-  const indicators = block.querySelectorAll('.carousel-hero-slide-indicator');
+  const indicators = block.parentElement.querySelectorAll('.carousel-hero-slide-indicator');
   indicators.forEach((indicator, idx) => {
     if (idx !== slideIndex) {
       indicator.querySelector('button').removeAttribute('disabled');
@@ -41,7 +41,7 @@ export function showSlide(block, slideIndex = 0) {
 }
 
 function bindEvents(block) {
-  const slideIndicators = block.querySelector('.carousel-hero-slide-indicators');
+  const slideIndicators = block.parentElement.querySelector('.carousel-hero-slide-indicators');
   if (!slideIndicators) return;
 
   slideIndicators.querySelectorAll('button').forEach((button) => {
@@ -51,10 +51,10 @@ function bindEvents(block) {
     });
   });
 
-  block.querySelector('.slide-prev').addEventListener('click', () => {
+  block.parentElement.querySelector('.slide-prev').addEventListener('click', () => {
     showSlide(block, parseInt(block.dataset.activeSlide, 10) - 1);
   });
-  block.querySelector('.slide-next').addEventListener('click', () => {
+  block.parentElement.querySelector('.slide-next').addEventListener('click', () => {
     showSlide(block, parseInt(block.dataset.activeSlide, 10) + 1);
   });
 
@@ -108,10 +108,10 @@ export default async function decorate(block) {
   if (!isSingleSlide) {
     const slideIndicatorsNav = document.createElement('nav');
     slideIndicatorsNav.setAttribute('aria-label', 'Carousel Slide Controls');
+    slideIndicatorsNav.classList.add('carousel-hero-indicators-nav');
     slideIndicators = document.createElement('ol');
     slideIndicators.classList.add('carousel-hero-slide-indicators');
     slideIndicatorsNav.append(slideIndicators);
-    block.append(slideIndicatorsNav);
 
     const slideNavButtons = document.createElement('div');
     slideNavButtons.classList.add('carousel-hero-navigation-buttons');
@@ -119,8 +119,11 @@ export default async function decorate(block) {
       <button type="button" class= "slide-prev" aria-label="Previous Slide"></button>
       <button type="button" class="slide-next" aria-label="Next Slide"></button>
     `;
+    // arrows live at the right of the indicator row
+    slideIndicatorsNav.append(slideNavButtons);
 
-    container.append(slideNavButtons);
+    // place the indicators (dots + arrows) outside the hero block, below it
+    block.after(slideIndicatorsNav);
   }
 
   rows.forEach((row, idx) => {
