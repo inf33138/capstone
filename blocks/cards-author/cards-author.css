@@ -1,0 +1,151 @@
+/* WKND author-bio byline (cards-author): single horizontal row
+   avatar (left) + name/role (stacked) + 3 dark square social icon buttons (right).
+   Values extracted from source .cmp-byline / .cmp-buildingblock--btn-list computed styles. */
+
+.cards-author > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* thin rule above the byline, matching the source separator (1px solid #ebebeb) */
+.cards-author {
+  border-top: 1px solid #ebebeb;
+  padding-top: 28px;
+}
+
+/* row: avatar | body */
+.cards-author > ul > li {
+  border: 0;
+  background-color: transparent;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: left;
+  gap: 25px;
+}
+
+/* avatar (source: 60x60 circle, object-fit cover) */
+.cards-author .cards-author-card-image {
+  line-height: 0;
+  width: 60px;
+  flex: 0 0 auto;
+}
+
+.cards-author .cards-author-card-image img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* body holds name, role and the social row */
+.cards-author .cards-author-card-body {
+  margin: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* name (source: 24px / 400 / line-height 36px / #202020) */
+.cards-author .cards-author-card-body h2,
+.cards-author .cards-author-card-body h3,
+.cards-author .cards-author-card-body h4 {
+  margin: 0;
+  font-family: var(--body-font-family);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #202020;
+}
+
+/* role (source: 12px / 400 / uppercase / letter-spacing normal / #696969) */
+.cards-author .cards-author-card-role {
+  margin: 4px 0 0;
+  color: #696969;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: normal;
+  text-transform: uppercase;
+}
+
+/* social row: 3 adjacent dark square icon buttons (source: 48x48, #202020 bg, #ebebeb glyph, gap 0) */
+.cards-author .cards-author-social {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  gap: 0;
+}
+
+.cards-author .cards-author-social li {
+  margin: 0;
+  padding: 0;
+}
+
+.cards-author .cards-author-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: #202020;
+  color: #ebebeb;
+  border-radius: 0;
+  text-decoration: none;
+  font-size: 0; /* clip the word label; the glyph is rendered via ::before */
+  overflow: hidden;
+}
+
+/* first-letter glyph approximating the source brand icons */
+.cards-author .cards-author-social-link::before {
+  font-family: var(--body-font-family);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: lowercase;
+}
+
+.cards-author .cards-author-social-link[href*="facebook"]::before { content: "f"; }
+.cards-author .cards-author-social-link[href*="twitter"]::before { content: "t"; }
+.cards-author .cards-author-social-link[href*="insta"]::before { content: "i"; }
+
+.cards-author .cards-author-social-link:hover,
+.cards-author .cards-author-social-link:focus-visible {
+  background-color: #000;
+  color: #ebebeb;
+  text-decoration: none;
+}
+
+/* desktop: name/role kept left, social pushed to the far right and vertically centered */
+@media (width >= 600px) {
+  .cards-author .cards-author-card-body {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    column-gap: 20px;
+  }
+
+  .cards-author .cards-author-card-body h2,
+  .cards-author .cards-author-card-body h3,
+  .cards-author .cards-author-card-body h4 {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .cards-author .cards-author-card-role {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .cards-author .cards-author-social {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: center;
+    margin: 0;
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "variantName": "cards-author",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-08-09T00:00:00.000Z",
+  "derivedFrom": "blocks/cards-profile (project-local cards variant)",
+  "sourceContext": {
+    "originUrl": "https://wknd.site/us/en/magazine/guide-la-skateparks.html",
+    "originPage": "WKND magazine article detail page (magazine-article template)",
+    "blockPosition": "bottom-of-article"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "compact",
+    "purpose": "author-bio",
+    "imagePattern": "small"
+  },
+  "contentPattern": {
+    "structure": "single [author image] | [name (heading) + role/occupations + 3 social links] row",
+    "buttonCount": 3,
+    "imageCount": 1,
+    "itemsObserved": 1
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "article author bylines / author-bio components",
+      "single-person profile rows shown at the end of an article",
+      "compact horizontal profile: small round photo + name + role + social links"
+    ],
+    "notSuitableFor": [
+      "team / staff / contributor GRIDS of multiple centered cards (use cards-profile)",
+      "article / product / adventure card grids (use the plain 'cards' block)",
+      "side-by-side text layouts (use columns)"
+    ]
+  },
+  "notes": "New variant derived from the project-local 'cards-profile' block, which already carries the correct people-profile content model and doc-project adaptations (imports only createOptimizedPicture from aem.js; no moveInstrumentation). A DISTINCT name (cards-author) is used instead of reusing cards-profile because, although the CONTENT MODEL is identical (row = [image] | [name + role + social links]), the VISUAL LAYOUT differs significantly: cards-profile renders a responsive GRID of centered, circular-photo team cards (About Us contributors/guides, spacious, large images, 2-4 columns), whereas cards-author renders a SINGLE horizontal byline row (left-aligned small round photo + name/role stacked, social icons inline, divided from the article body by an hr). Similarity scoring against cards-profile metadata was ~30% (purpose team vs author-bio, density spacious vs compact, imagePattern large vs small), well below the 80% reuse threshold. Content model: row 1 = block name; each subsequent row = 2 cells [author image] | [name (heading) + role paragraph + social links]. Decoration converts rows to <ul><li>, sets the single-picture cell to .cards-author-card-image and the text cell to .cards-author-card-body, tags the first non-link paragraph as .cards-author-card-role, and gathers the social <a> elements into a .cards-author-social row (labels Facebook/Twitter/Instagram; placeholder hrefs preserved). The preceding hr separator from the source is authored as default content in the section, not part of the block. Reused across all 4 magazine-article pages in the group.",
+  "usage": {
+    "pagesUsing": ["/us/en/magazine/guide-la-skateparks"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-09T00:00:00.000Z"
+  }
+}
