@@ -58,21 +58,40 @@
   color: #202020;
 }
 
-.columns > div > div:not(.columns-img-col) a {
+.columns > div > div:not(.columns-img-col) a,
+.columns > div > div:not(.columns-img-col) a.button {
   display: inline-block;
+  max-width: none;
   margin-top: 24px;
+  border: 0;
+  border-radius: 0;
   padding: 14px 35px;
   background: #ffea00;
   color: #202020;
   font-size: 14px;
   font-weight: 600;
+  line-height: 1.2;
   text-transform: uppercase;
+  white-space: normal;
   text-decoration: none;
+  cursor: pointer;
+  pointer-events: auto;
   transition: background-color 0.2s ease;
 }
 
-.columns > div > div:not(.columns-img-col) a:hover {
+/* The whole yellow box is the click target: route any pointer event that lands
+   on inner content (text span, stray wrapper) to the anchor itself so there is
+   no dead zone within the button. */
+.columns > div > div:not(.columns-img-col) a * {
+  pointer-events: none;
+}
+
+.columns > div > div:not(.columns-img-col) a:hover,
+.columns > div > div:not(.columns-img-col) a.button:hover,
+.columns > div > div:not(.columns-img-col) a.button:focus-visible {
+  border: 0;
   background: #f0dc00;
+  color: #202020;
 }
 
 @media (width >= 900px) {

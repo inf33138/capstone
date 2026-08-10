@@ -410,6 +410,60 @@
           "defaultContent": []
         }
       ]
+    },
+    {
+      "name": "magazine-article",
+      "urls": [
+        "https://wknd.site/us/en/magazine/guide-la-skateparks.html",
+        "https://wknd.site/us/en/magazine/ski-touring.html",
+        "https://wknd.site/us/en/magazine/arctic-surfing.html",
+        "https://wknd.site/us/en/magazine/san-diego-surf.html"
+      ],
+      "representativeUrl": "https://wknd.site/us/en/magazine/guide-la-skateparks.html",
+      "coverageGaps": [],
+      "description": "WKND magazine article detail page: optional full-width hero image, breadcrumb (Magazine > article title), H1 article title, H4 byline, long-form article body (paragraphs, pull-quote blockquotes, H2 subheadings, inline images, image-with-caption, address paragraphs), an author-bio block (separator + author name/role + social links), and a sidebar column (SHARE THIS STORY, optional Download PDF, related-articles list). Global header and footer are experience fragments.",
+      "blocks": [
+        {
+          "name": "cards-author",
+          "instances": [
+            "main main div.experiencefragment"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "rc2",
+          "name": "Article",
+          "selector": "main.container.responsivegrid.cmp-layout-container--fixed",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "main div.image.aem-GridColumn",
+            "main div.breadcrumb.aem-GridColumn",
+            "main main.container.responsivegrid"
+          ]
+        },
+        {
+          "id": "rc3",
+          "name": "Author Bio",
+          "selector": "main main div.experiencefragment",
+          "style": null,
+          "blocks": [
+            "cards-author"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc4",
+          "name": "Sidebar",
+          "selector": "main aside.cmp-layoutcontainer--sidebar",
+          "style": "sidebar",
+          "blocks": [],
+          "defaultContent": [
+            "main aside.cmp-layoutcontainer--sidebar"
+          ]
+        }
+      ]
     }
   ]
 }
