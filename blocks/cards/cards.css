@@ -1,5 +1,15 @@
 /* WKND image-list style cards: borderless, image on top, blue title, gray copy */
 
+/* Category label above the card title (dynamic query-index cards) */
+.cards .cards-card-body .cards-card-category {
+  margin: 0 0 4px;
+  color: #ffab00;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 /* Adventure category filter tabs (adventures listing grid only) */
 .cards .cards-filters {
   display: flex;
