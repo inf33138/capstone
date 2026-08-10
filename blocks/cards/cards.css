@@ -1,4 +1,39 @@
 /* WKND image-list style cards: borderless, image on top, blue title, gray copy */
+
+/* Adventure category filter tabs (adventures listing grid only) */
+.cards .cards-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 4px;
+  margin: 0 0 32px;
+}
+
+.cards .cards-filter {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: #000;
+  font-family: var(--body-font-family);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.cards .cards-filter:hover {
+  color: #696969;
+}
+
+.cards .cards-filter[aria-selected='true'],
+.cards .cards-filter[aria-selected='true']:hover {
+  background-color: #000;
+  color: #fff;
+}
+
 .cards > ul {
   list-style: none;
   margin: 0;
