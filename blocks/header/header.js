@@ -227,8 +227,11 @@ function decorateSearch(container) {
       return;
     }
     const data = await loadSearchIndex();
+    // Match against the title OR the path, so a section query (e.g. "magazine")
+    // also surfaces that section's pages (its articles live under /magazine/…).
     const matches = data
-      .filter((e) => e.path && e.title && e.title.toLowerCase().includes(q))
+      .filter((e) => e.path && e.title
+        && (e.title.toLowerCase().includes(q) || e.path.toLowerCase().includes(q)))
       .slice(0, SEARCH_MAX_RESULTS);
     renderSuggestions(matches);
   };
