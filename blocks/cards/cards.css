@@ -17,6 +17,12 @@
   line-height: 0;
 }
 
+/* the image is wrapped in a link to the article; keep it block-level so the
+   linked image fills the column with no inline baseline gap */
+.cards .cards-card-image a {
+  display: block;
+}
+
 .cards > ul > li img {
   width: 100%;
   aspect-ratio: 765 / 535;
@@ -56,6 +62,7 @@
   color: #696969;
   font-size: 14px;
   line-height: 1.5;
+  text-transform: uppercase;
 }
 
 @media (width >= 600px) {

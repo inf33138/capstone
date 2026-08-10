@@ -179,6 +179,54 @@ function decorateSectionMetadata(main) {
 }
 
 /**
+ * Groups the WKND "Members Only" teasers (default content authored as a flat
+ * sequence of H2 + subtitle + "Read More" + image per teaser) into side-by-side
+ * cards, each tagged with a members-only lock badge. Guarded to the members-only
+ * pattern (every H2 group must contain both a "Read More" action and an image),
+ * so ordinary default content (article bodies, section intros) is untouched.
+ * @param {Element} main The main element
+ */
+function decorateMembersTeasers(main) {
+  main.querySelectorAll('.default-content-wrapper').forEach((wrapper) => {
+    if (wrapper.querySelector(':scope > .members-teasers')) return; // already done
+
+    // Split the wrapper's children into groups, each starting at an H2.
+    const groups = [];
+    let current = null;
+    [...wrapper.children].forEach((el) => {
+      if (el.tagName === 'H2') {
+        current = [el];
+        groups.push(current);
+      } else if (current) {
+        current.push(el);
+      }
+    });
+
+    // Members-only teaser signature: 2+ groups, every group has an image and a
+    // "Read More" action paragraph.
+    const isTeaser = (group) => group.some((el) => el.querySelector('picture'))
+      && group.some((el) => el.tagName === 'P' && /^read more$/i.test(el.textContent.trim()));
+    if (groups.length < 2 || !groups.every(isTeaser)) return;
+
+    const container = document.createElement('div');
+    container.className = 'members-teasers';
+    groups.forEach((group) => {
+      const card = document.createElement('div');
+      card.className = 'members-teaser';
+      group.forEach((el) => {
+        if (el.tagName === 'H2') el.classList.add('members-teaser-title');
+        else if (el.querySelector('picture')) el.classList.add('members-teaser-image');
+        else if (/^read more$/i.test(el.textContent.trim())) el.classList.add('members-teaser-action');
+        else el.classList.add('members-teaser-desc');
+        card.append(el);
+      });
+      container.append(card);
+    });
+    wrapper.append(container);
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -190,6 +238,7 @@ export function decorateMain(main) {
   decorateSectionMetadata(main);
   decorateBlocks(main);
   decorateButtons(main);
+  decorateMembersTeasers(main);
 }
 
 /**

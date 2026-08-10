@@ -13,5 +13,26 @@ export default function decorate(block) {
     ul.append(li);
   });
   ul.querySelectorAll('picture > img').forEach((img) => img.closest('picture').replaceWith(createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }])));
+
+  // Make the card image a clickable link to the same destination as the title.
+  // The title link already provides an accessible route to the article, so the
+  // image link is hidden from assistive tech (aria-hidden + tabindex=-1) to
+  // avoid announcing the same destination twice.
+  ul.querySelectorAll(':scope > li').forEach((li) => {
+    const imageCol = li.querySelector('.cards-card-image');
+    const picture = imageCol && imageCol.querySelector('picture');
+    const titleLink = li.querySelector('.cards-card-body a[href]');
+    if (!imageCol || !picture || !titleLink || imageCol.querySelector('a')) return;
+    const link = document.createElement('a');
+    link.href = titleLink.getAttribute('href');
+    link.setAttribute('aria-hidden', 'true');
+    link.setAttribute('tabindex', '-1');
+    // preserve any link behavior authored on the title (e.g. new-tab CTAs)
+    if (titleLink.target) link.target = titleLink.target;
+    if (titleLink.rel) link.rel = titleLink.rel;
+    link.append(picture);
+    imageCol.append(link);
+  });
+
   block.replaceChildren(ul);
 }
