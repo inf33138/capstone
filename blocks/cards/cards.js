@@ -135,7 +135,8 @@ function resolveContentPath(path) {
 /**
  * Build the raw block rows (a div per card, matching the authored contract:
  * [image cell][body cell]) from query-index entries, so they flow through the
- * same decoration pipeline as authored cards. Newest entries first.
+ * same decoration pipeline as authored cards. Entries are rendered in index
+ * order (the query index is the source of ordering).
  * @param {Element} block The cards block element
  * @param {Array<Object>} entries query-index rows
  * @param {number} limit Max number of cards to render
@@ -143,7 +144,6 @@ function resolveContentPath(path) {
 function renderIndexCards(block, entries, limit) {
   const items = entries
     .filter((e) => e.path && e.title)
-    .sort((a, b) => Number(b.lastModified || 0) - Number(a.lastModified || 0))
     .slice(0, limit);
   if (!items.length) return; // keep authored fallback if the index is empty
 
