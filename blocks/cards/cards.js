@@ -114,11 +114,93 @@ function truncateCardDescriptions(block, ul) {
   });
 }
 
+// Grids that get a keyword filter box + "Load more" pagination, keyed by section
+// heading (lower-cased). pageSize = cards revealed per page.
+const CARD_PAGINATION = {
+  'recent articles': { pageSize: 3 },
+};
+
+/**
+ * Add a keyword filter box and "Load more" pagination to a card grid, scoped by
+ * section heading via CARD_PAGINATION. Typing filters cards by title +
+ * description text; the visible matches are then revealed a page at a time via
+ * "Load more". Filtering resets to the first page. Shows an empty-state message
+ * when nothing matches. No-ops (shows all cards) if the grid isn't configured.
+ * @param {Element} block The cards block element
+ * @param {HTMLUListElement} ul The decorated card list
+ */
+function addFilterAndPagination(block, ul) {
+  const section = block.closest('.section');
+  const heading = section && section.querySelector('h1, h2, h3');
+  if (!heading) return;
+  const config = CARD_PAGINATION[heading.textContent.trim().toLowerCase()];
+  if (!config) return;
+
+  const cards = [...ul.querySelectorAll(':scope > li')];
+  if (!cards.length) return;
+
+  const { pageSize } = config;
+  let query = '';
+  let shown = pageSize;
+
+  // Filter control (search box) above the grid.
+  const filterBar = document.createElement('div');
+  filterBar.className = 'cards-filter-bar';
+  const search = document.createElement('input');
+  search.type = 'search';
+  search.className = 'cards-filter-input';
+  search.placeholder = 'Filter articles…';
+  search.setAttribute('aria-label', 'Filter articles');
+  filterBar.append(search);
+
+  // Empty-state message (hidden unless a filter matches nothing).
+  const empty = document.createElement('p');
+  empty.className = 'cards-empty';
+  empty.textContent = 'No articles match your search.';
+  empty.hidden = true;
+
+  // "Load more" button below the grid.
+  const more = document.createElement('button');
+  more.type = 'button';
+  more.className = 'cards-load-more';
+  more.textContent = 'Load more';
+
+  const matches = (li) => {
+    if (!query) return true;
+    return li.textContent.toLowerCase().includes(query);
+  };
+
+  const render = () => {
+    const matched = cards.filter(matches);
+    cards.forEach((li) => { li.hidden = true; });
+    matched.slice(0, shown).forEach((li) => { li.hidden = false; });
+    empty.hidden = matched.length > 0;
+    more.hidden = matched.length <= shown;
+  };
+
+  search.addEventListener('input', () => {
+    query = search.value.trim().toLowerCase();
+    shown = pageSize; // reset to first page on every filter change
+    render();
+  });
+
+  more.addEventListener('click', () => {
+    shown += pageSize;
+    render();
+  });
+
+  block.prepend(filterBar);
+  ul.after(empty, more);
+  render();
+}
+
 // Query-index-driven card grids. Instead of hard-coding the card list, the
 // listed grids fetch a published query-index.json at runtime and render the
 // newest N entries. Keyed by section heading (lower-cased).
 const CARD_INDEX_SOURCES = {
-  'recent articles': { index: '/us/en/magazine/query-index.json', limit: 4 },
+  // Render up to 24 newest articles; the filter + "Load more" pagination below
+  // control how many are visible at once (3 per page).
+  'recent articles': { index: '/us/en/magazine/query-index.json', limit: 24 },
 };
 
 /**
@@ -245,4 +327,5 @@ export default async function decorate(block) {
 
   addAdventureFilters(block, ul);
   truncateCardDescriptions(block, ul);
+  addFilterAndPagination(block, ul);
 }
