@@ -1,6 +1,20 @@
 version: 1
 
 indices:
+  # Site-wide page index — feeds the header search autocomplete (path + title
+  # for every page). Targets the default /query-index.json.
+  pages:
+    include:
+      - '/us/en/**'
+    target: /query-index.json
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: attribute(el, 'content')
+      description:
+        select: head > meta[name="description"]
+        value: attribute(el, 'content')
+
   # Magazine articles — feeds the homepage "Recent Articles" cards, which query
   # this index at runtime (newest first) instead of hard-coding the list.
   magazine:

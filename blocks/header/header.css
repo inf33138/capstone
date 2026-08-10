@@ -448,12 +448,54 @@ header nav .nav-tools {
 
 /* light-gray rectangular search box: icon left + SEARCH placeholder */
 header nav .nav-search {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 10px;
   background: #f0f0f0;
   padding: 12px 16px;
   box-sizing: border-box;
+}
+
+/* Autocomplete suggestions dropdown: dark panel of clickable page titles,
+   anchored below the search field (matches the WKND search reference). */
+header nav .nav-search-suggestions {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: auto;
+  z-index: 20;
+  width: max(100%, 320px);
+  margin: 0;
+  padding: 8px 0;
+  list-style: none;
+  background: #1d1d1d;
+  box-shadow: 0 12px 24px rgb(0 0 0 / 25%);
+}
+
+header nav .nav-search-suggestion {
+  margin: 0;
+  padding: 0;
+}
+
+header nav .nav-search-suggestion a {
+  display: block;
+  padding: 14px 24px;
+  color: #fff;
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+header nav .nav-search-suggestion.is-active a,
+header nav .nav-search-suggestion a:hover,
+header nav .nav-search-suggestion a:focus {
+  background: #333;
+  color: #ffea00;
 }
 
 header nav .nav-search-label {

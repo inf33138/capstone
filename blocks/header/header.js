@@ -113,9 +113,35 @@ function toggleMenu(nav, navSections, forceExpanded = null) {
  * loads and decorates the header, mainly the nav
  * @param {Element} block The header block element
  */
+// Site-wide page index that feeds the search autocomplete. On the dev server
+// content lives under a /content/ prefix; preview/live serve it at the root.
+const SEARCH_INDEX_PATH = '/query-index.json';
+const SEARCH_MAX_RESULTS = 6;
+
 /**
- * Turns a placeholder paragraph whose text is "Search" into a search form.
- * Content stays authorable in nav.plain.html; the form control is built here.
+ * Fetch and cache the page index once. Resolves to an array of {path, title}
+ * entries, or [] on any failure (so the search box degrades to a plain field).
+ * @returns {Promise<Array<{path:string,title:string}>>}
+ */
+let searchIndexPromise;
+function loadSearchIndex() {
+  if (!searchIndexPromise) {
+    const onContentPrefix = window.location.pathname.startsWith('/content/');
+    const url = onContentPrefix ? `/content${SEARCH_INDEX_PATH}` : SEARCH_INDEX_PATH;
+    searchIndexPromise = fetch(url)
+      .then((resp) => (resp.ok ? resp.json() : { data: [] }))
+      .then((json) => (Array.isArray(json.data) ? json.data : []))
+      .catch(() => []);
+  }
+  return searchIndexPromise;
+}
+
+/**
+ * Turns a placeholder paragraph whose text is "Search" into an autocomplete
+ * search form. As the user types, matching page titles from the site index are
+ * shown in a dropdown; selecting one navigates to that page. Content stays
+ * authorable in nav.plain.html; the control is built here. Degrades to a plain
+ * search field (submitting to the search page) if the index is unavailable.
  * @param {Element} container The nav-tools section
  */
 function decorateSearch(container) {
@@ -141,9 +167,95 @@ function decorateSearch(container) {
   input.name = 'q';
   input.placeholder = 'Search';
   input.setAttribute('aria-label', 'Search');
+  input.setAttribute('autocomplete', 'off');
+  input.setAttribute('role', 'combobox');
+  input.setAttribute('aria-expanded', 'false');
+  input.setAttribute('aria-controls', 'nav-search-suggestions');
 
-  form.append(label, input);
+  const results = document.createElement('ul');
+  results.className = 'nav-search-suggestions';
+  results.id = 'nav-search-suggestions';
+  results.setAttribute('role', 'listbox');
+  results.hidden = true;
+
+  form.append(label, input, results);
   placeholder.replaceWith(form);
+
+  let activeIndex = -1;
+
+  const closeSuggestions = () => {
+    results.hidden = true;
+    results.replaceChildren();
+    input.setAttribute('aria-expanded', 'false');
+    activeIndex = -1;
+  };
+
+  const rebasePath = (path) => (window.location.pathname.startsWith('/content/') ? `/content${path}` : path);
+
+  const setActive = (idx) => {
+    const items = [...results.children];
+    items.forEach((li, i) => li.classList.toggle('is-active', i === idx));
+    activeIndex = idx;
+    if (items[idx]) items[idx].scrollIntoView({ block: 'nearest' });
+  };
+
+  const renderSuggestions = (matches) => {
+    results.replaceChildren();
+    if (!matches.length) {
+      closeSuggestions();
+      return;
+    }
+    matches.forEach((item) => {
+      const li = document.createElement('li');
+      li.className = 'nav-search-suggestion';
+      li.setAttribute('role', 'option');
+      const a = document.createElement('a');
+      a.href = rebasePath(item.path);
+      a.textContent = item.title;
+      li.append(a);
+      results.append(li);
+    });
+    results.hidden = false;
+    input.setAttribute('aria-expanded', 'true');
+    activeIndex = -1;
+  };
+
+  const update = async () => {
+    const q = input.value.trim().toLowerCase();
+    if (!q) {
+      closeSuggestions();
+      return;
+    }
+    const data = await loadSearchIndex();
+    const matches = data
+      .filter((e) => e.path && e.title && e.title.toLowerCase().includes(q))
+      .slice(0, SEARCH_MAX_RESULTS);
+    renderSuggestions(matches);
+  };
+
+  input.addEventListener('input', update);
+  input.addEventListener('focus', () => { loadSearchIndex(); if (input.value.trim()) update(); });
+
+  input.addEventListener('keydown', (e) => {
+    const items = [...results.children];
+    if (e.key === 'ArrowDown' && items.length) {
+      e.preventDefault();
+      setActive((activeIndex + 1) % items.length);
+    } else if (e.key === 'ArrowUp' && items.length) {
+      e.preventDefault();
+      setActive((activeIndex - 1 + items.length) % items.length);
+    } else if (e.key === 'Enter' && activeIndex >= 0 && items[activeIndex]) {
+      e.preventDefault();
+      items[activeIndex].querySelector('a').click();
+    } else if (e.key === 'Escape') {
+      closeSuggestions();
+    }
+  });
+
+  // close when focus/click leaves the search form
+  document.addEventListener('click', (e) => {
+    if (!form.contains(e.target)) closeSuggestions();
+  });
 }
 
 /**

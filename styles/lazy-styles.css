@@ -399,3 +399,77 @@ main:has(> .section.sidebar) > .section.sidebar .default-content-wrapper p a[hre
     padding: 0;
   }
 }
+
+/* ==========================================================================
+   FAQ page two-column layout
+   The FAQ page is a single page split by EDS into four sections in this order:
+     1. FAQs title + hero image   (first .section)
+     2. intro paragraph           (.section, no heading/accordion)
+     3. FAQ accordion             (.section.accordion-container)
+     4. "Need more help?" contact (last .section)
+   On desktop, lay them out as a two-column grid: the image/intro/accordion form
+   the left primary column, and the "Need more help?" panel sits in a right-side
+   sidebar starting in the top row (aligned with the hero image). Scoped via
+   `main:has(> .section.accordion-container)` — only the FAQ page has an
+   accordion section, so no other page is affected. Mobile keeps the natural
+   single-column stack.
+   ========================================================================== */
+@media (width >= 900px) {
+  main:has(> .section.accordion-container) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    column-gap: 72px;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* Left primary column: title+image, intro, and accordion stack in order */
+  main:has(> .section.accordion-container) > .section:nth-of-type(1),
+  main:has(> .section.accordion-container) > .section:nth-of-type(2),
+  main:has(> .section.accordion-container) > .section.accordion-container {
+    grid-column: 1;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  main:has(> .section.accordion-container) > .section:nth-of-type(1) {
+    grid-row: 1;
+  }
+
+  main:has(> .section.accordion-container) > .section:nth-of-type(2) {
+    grid-row: 2;
+  }
+
+  main:has(> .section.accordion-container) > .section.accordion-container {
+    grid-row: 3;
+  }
+
+  /* Right sidebar: "Need more help?" — the last section — aligned to the top
+     row so it sits beside the hero image, spanning the left column's rows. */
+  main:has(> .section.accordion-container) > .section:last-of-type {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    margin-top: 0;
+  }
+
+  /* Grid controls column width — drop the sections' inner max-width/padding so
+     content fills each column without double gutters. */
+  main:has(> .section.accordion-container) > .section > div {
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* FAQ intro paragraph: justified text with airy leading (matches the source).
+   The intro is the FAQ page's second section's default-content paragraph; the
+   accordion-container signal scopes this to the FAQ page only. Applies at all
+   breakpoints. */
+main:has(> .section.accordion-container) > .section:nth-of-type(2) .default-content-wrapper p {
+  text-align: justify;
+  line-height: 2;
+}
