@@ -37,6 +37,3 @@ indices:
       publishedDate:
         select: head > meta[name="published-date"]
         value: attribute(el, 'content')
-      category:
-        select: head > meta[name="category"]
-        value: attribute(el, 'content')

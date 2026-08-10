@@ -105,7 +105,7 @@ function truncateCardDescriptions(block, ul) {
   const limit = CARD_DESC_LIMITS[heading.textContent.trim().toLowerCase()];
   if (!limit) return;
 
-  ul.querySelectorAll(':scope > li .cards-card-body p:not(.cards-card-category)').forEach((p) => {
+  ul.querySelectorAll(':scope > li .cards-card-body p').forEach((p) => {
     const text = p.textContent.trim();
     if (text.length > limit) {
       p.title = text;
@@ -161,12 +161,6 @@ function renderIndexCards(block, entries, limit) {
     }
 
     const bodyCell = document.createElement('div');
-    if (item.category) {
-      const cat = document.createElement('p');
-      cat.className = 'cards-card-category';
-      cat.textContent = item.category;
-      bodyCell.append(cat);
-    }
     const h3 = document.createElement('h3');
     const a = document.createElement('a');
     a.href = path;
