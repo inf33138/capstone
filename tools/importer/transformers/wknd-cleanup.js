@@ -38,11 +38,25 @@ const TransformHook = {
 
 export default function transform(hookName, element, payload) {
   if (hookName === TransformHook.beforeTransform) {
-    // Strip tabbed-filter chrome so only the active "All" panel's grid survives
+    // Strip tabbed-FILTER chrome so only the active "All" panel's grid survives
     // into block parsing (avoids duplicate category cards + stray tab labels).
-    // Guarded to the tabs component, so pages without tabs are unaffected.
-    element.querySelectorAll('.tabs.panelcontainer .cmp-tabs__tablist').forEach((el) => el.remove());
-    element.querySelectorAll('.tabs.panelcontainer .cmp-tabs__tabpanel:not(.cmp-tabs__tabpanel--active)').forEach((el) => el.remove());
+    //
+    // IMPORTANT: only the adventures LISTING page uses tabs as a category filter
+    // over a card grid — there each tab panel wraps an `.image-list` of the same
+    // cards, so we keep just the active panel. The adventure-DETAIL pages use the
+    // SAME `div.tabs.panelcontainer` selector for a genuine content-tabs block
+    // (Overview / Itinerary / What to Bring), whose panels hold content fragments,
+    // NOT card grids — those tabs are real content and must survive intact.
+    //
+    // Discriminate per tabs component: only strip the filter chrome when the tabs
+    // contain an `.image-list` (the listing filter). Content-fragment tabs (detail
+    // pages) have no `.image-list`, so they are left untouched.
+    element.querySelectorAll('.tabs.panelcontainer').forEach((tabs) => {
+      const isCategoryFilter = tabs.querySelector('.cmp-tabs__tabpanel .image-list');
+      if (!isCategoryFilter) return; // real content tabs (detail page) — preserve
+      tabs.querySelectorAll('.cmp-tabs__tablist').forEach((el) => el.remove());
+      tabs.querySelectorAll('.cmp-tabs__tabpanel:not(.cmp-tabs__tabpanel--active)').forEach((el) => el.remove());
+    });
   }
 
   if (hookName === TransformHook.afterTransform) {

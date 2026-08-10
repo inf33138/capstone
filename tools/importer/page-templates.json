@@ -410,6 +410,101 @@
           "defaultContent": []
         }
       ]
+    },
+    {
+      "name": "adventure-detail",
+      "urls": [
+        "https://wknd.site/us/en/adventures/bali-surf-camp.html",
+        "https://wknd.site/us/en/adventures/beervana-portland.html",
+        "https://wknd.site/us/en/adventures/climbing-new-zealand.html",
+        "https://wknd.site/us/en/adventures/colorado-rock-climbing.html",
+        "https://wknd.site/us/en/adventures/cycling-southern-utah.html",
+        "https://wknd.site/us/en/adventures/cycling-tuscany.html",
+        "https://wknd.site/us/en/adventures/downhill-skiing-wyoming.html",
+        "https://wknd.site/us/en/adventures/gastronomic-marais-tour.html",
+        "https://wknd.site/us/en/adventures/napa-wine-tasting.html",
+        "https://wknd.site/us/en/adventures/riverside-camping-australia.html",
+        "https://wknd.site/us/en/adventures/ski-touring-mont-blanc.html",
+        "https://wknd.site/us/en/adventures/surf-camp-costa-rica.html",
+        "https://wknd.site/us/en/adventures/tahoe-skiing.html",
+        "https://wknd.site/us/en/adventures/west-coast-cycling.html",
+        "https://wknd.site/us/en/adventures/whistler-mountain-biking.html",
+        "https://wknd.site/us/en/adventures/yosemite-backpacking.html"
+      ],
+      "coverageGaps": [],
+      "description": "WKND individual adventure detail page: breadcrumb, image carousel, title, adventure details spec list + share links, and a tabbed Overview/Itinerary/What-to-Bring content section",
+      "blocks": [
+        {
+          "name": "carousel-adventure",
+          "instances": [
+            "div.carousel.panelcontainer.cmp-carousel--mini"
+          ]
+        },
+        {
+          "name": "adventure-details",
+          "instances": [
+            "div.contentfragment.cmp-contentfragment--elements article.cmp-contentfragment"
+          ]
+        },
+        {
+          "name": "tabs",
+          "instances": [
+            "div.tabs.panelcontainer"
+          ]
+        }
+      ],
+      "sections": [
+        {
+          "id": "rc1",
+          "name": "Breadcrumb",
+          "selector": "div.breadcrumb.cmp-breadcrumb--fixed",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "nav.cmp-breadcrumb ol.cmp-breadcrumb__list"
+          ]
+        },
+        {
+          "id": "rc2",
+          "name": "Image Carousel",
+          "selector": "div.carousel.panelcontainer.cmp-carousel--mini",
+          "style": null,
+          "blocks": [
+            "carousel-adventure"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc3",
+          "name": "Title",
+          "selector": "div.title.cmp-title--underline",
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "div.title.cmp-title--underline h1"
+          ]
+        },
+        {
+          "id": "rc4",
+          "name": "Adventure Details",
+          "selector": "div.contentfragment.cmp-contentfragment--elements article.cmp-contentfragment",
+          "style": null,
+          "blocks": [
+            "adventure-details"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc5",
+          "name": "Tabbed Content",
+          "selector": "div.tabs.panelcontainer",
+          "style": null,
+          "blocks": [
+            "tabs"
+          ],
+          "defaultContent": []
+        }
+      ]
     }
   ]
 }

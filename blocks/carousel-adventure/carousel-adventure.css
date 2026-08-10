@@ -1,0 +1,148 @@
+.carousel-adventure .carousel-adventure-slides-container {
+  position: relative;
+}
+
+.carousel-adventure .carousel-adventure-slides,
+.carousel-adventure .carousel-adventure-slide-indicators {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.carousel-adventure .carousel-adventure-slides {
+  display: flex;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  overflow: scroll clip;
+}
+
+.carousel-adventure .carousel-adventure-slides::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-adventure .carousel-adventure-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  min-height: min(50vw, calc(100dvh - var(--header-height)));
+}
+
+/* image-only slide: image fills the slide */
+.carousel-adventure .carousel-adventure-slide .carousel-adventure-slide-image {
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-adventure .carousel-adventure-slide .carousel-adventure-slide-image picture {
+  position: absolute;
+  inset: 0;
+}
+
+.carousel-adventure .carousel-adventure-slide .carousel-adventure-slide-image picture > img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* optional overlaid text (unused for image-only adventure slides, kept for safety) */
+.carousel-adventure .carousel-adventure-slide .carousel-adventure-slide-content {
+  z-index: 1;
+  margin: 68px;
+  padding: 16px;
+  color: white;
+  background-color: rgb(19 19 19 / 75%);
+  position: relative;
+  width: var(--slide-content-width, auto);
+}
+
+.carousel-adventure .carousel-adventure-slide-indicators {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 12px;
+  padding: 12px;
+  background-color: var(--light-color);
+  line-height: 0;
+}
+
+.carousel-adventure .carousel-adventure-slide-indicator button {
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  background-color: #dadada;
+  transition: background-color 0.2s;
+}
+
+.carousel-adventure .carousel-adventure-slide-indicator button:disabled,
+.carousel-adventure .carousel-adventure-slide-indicator button:hover,
+.carousel-adventure .carousel-adventure-slide-indicator button:focus-visible {
+  background-color: var(--text-color);
+}
+
+.carousel-adventure .carousel-adventure-navigation-buttons {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+.carousel-adventure .carousel-adventure-navigation-buttons button {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  border-radius: 50%;
+  padding: 0;
+  background-color: rgb(19 19 19 / 25%);
+  transition: background-color 0.2s;
+}
+
+.carousel-adventure .carousel-adventure-navigation-buttons button:hover,
+.carousel-adventure .carousel-adventure-navigation-buttons button:focus-visible {
+  background-color: rgb(19 19 19 / 75%);
+}
+
+.carousel-adventure .carousel-adventure-navigation-buttons button::after {
+  display: block;
+  content: '';
+  border: 2px solid;
+  border-bottom: 0;
+  border-left: 0;
+  height: 12px;
+  width: 12px;
+  position: absolute;
+  top: 50%;
+  left: calc(50% + 2px);
+  transform: translate(-50%, -50%) rotate(-135deg);
+}
+
+.carousel-adventure .carousel-adventure-navigation-buttons button.slide-next::after {
+  transform: translate(-50%, -50%) rotate(45deg);
+  left: calc(50% - 2px);
+}
+
+@media (width >= 600px) {
+  .carousel-adventure .carousel-adventure-navigation-buttons {
+    left: 24px;
+    right: 24px;
+  }
+
+  .carousel-adventure .carousel-adventure-slide .carousel-adventure-slide-content {
+    --slide-content-width: calc((100% - 184px) / 2);
+
+    margin: 92px;
+  }
+}

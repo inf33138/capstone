@@ -1,0 +1,41 @@
+{
+  "variantName": "tabs",
+  "baseBlock": "tabs",
+  "version": "1.0.0",
+  "created": "2026-08-10T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://wknd.site/us/en/adventures/bali-surf-camp.html",
+    "originPage": "WKND adventure detail page (Bali Surf Camp)",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "compact",
+    "purpose": "content-switcher",
+    "imagePattern": "mixed"
+  },
+  "contentPattern": {
+    "structure": "repeating [tab label] | [tab panel content] rows",
+    "buttonCount": 0,
+    "imageCount": 1,
+    "itemsObserved": 3
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "tabbed content switchers with a horizontal tablist",
+      "grouping related sections (Overview / Itinerary / What to Bring) where one panel is visible at a time",
+      "detail pages that segment long-form content under labeled tabs"
+    ],
+    "notSuitableFor": [
+      "stacked collapsible Q&A panels where multiple can open (use accordion)",
+      "content that should always be fully visible without interaction",
+      "grids of distinct items with images (use cards)"
+    ]
+  },
+  "notes": "New variant derived from the AEM Block Collection 'tabs' block. Standard project naming (plain 'tabs', matching the cards/columns/hero/accordion convention). Tabs was chosen over the existing 'accordion' block: the source uses a horizontal tablist with a single active panel (not stacked expandable rows), and 'accordion' is reserved for FAQ-style Q&A. Content model: first row = block name; each subsequent row = 2 cells [tab label] | [tab panel content]. Decoration builds a role=tablist of buttons and toggles aria-hidden on role=tabpanel divs; the first tab is active by default. Adapted for this stripped @adobe/aem-boilerplate: the vanilla 'moveInstrumentation' import (scripts.js) and its two calls were REMOVED because scripts.js does not export it in this doc project; 'toClassName' IS exported by aem.js and is retained.",
+  "usage": {
+    "pagesUsing": ["/us/en/adventures/bali-surf-camp"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-10T00:00:00.000Z"
+  }
+}

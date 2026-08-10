@@ -1,0 +1,42 @@
+{
+  "variantName": "adventure-details",
+  "baseBlock": "adventure-details",
+  "version": "1.0.0",
+  "created": "2026-08-10T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://wknd.site/us/en/adventures/bali-surf-camp.html",
+    "originPage": "WKND adventure detail page (Bali Surf Camp)",
+    "blockPosition": "middle-left"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "compact",
+    "purpose": "spec-list",
+    "imagePattern": "noimg"
+  },
+  "contentPattern": {
+    "structure": "repeating [label] | [value] rows rendered as a definition list",
+    "buttonCount": 0,
+    "imageCount": 0,
+    "itemsObserved": 6
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "key/value specification panels (Activity, Trip Length, Group Size, Difficulty, Price, etc.)",
+      "product / adventure fact sheets rendered as a definition list",
+      "compact label-over-value or label/value spec sidebars"
+    ],
+    "notSuitableFor": [
+      "free-form side-by-side content (use columns)",
+      "collapsible Q&A (use accordion)",
+      "generic wide tabular data with many columns (use the table block)",
+      "cards with images (use cards / cards-profile)"
+    ]
+  },
+  "notes": "Bespoke block (no Block Collection base) created for the WKND adventure detail spec panel. Source is an AEM content-fragment definition list (dt=label, dd=value). Content model: first row = block name 'adventure-details'; each subsequent row = 2 cells [label] | [value]. Decoration emits a semantic <dl> with .adventure-details-item groups, each holding a <dt class=adventure-details-label> and <dd class=adventure-details-value>. The 'table' block was considered but rejected: a purpose-built definition-list keeps the label/value semantics and matches the left-column spec design. Uses only plain DOM APIs - no aem.js/scripts.js import (this stripped @adobe/aem-boilerplate does not export moveInstrumentation or fetchPlaceholders).",
+  "usage": {
+    "pagesUsing": ["/us/en/adventures/bali-surf-camp"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-10T00:00:00.000Z"
+  }
+}

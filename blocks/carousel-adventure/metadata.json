@@ -1,0 +1,41 @@
+{
+  "variantName": "carousel-adventure",
+  "baseBlock": "carousel",
+  "version": "1.0.0",
+  "created": "2026-08-10T00:00:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://wknd.site/us/en/adventures/bali-surf-camp.html",
+    "originPage": "WKND adventure detail page (Bali Surf Camp)",
+    "blockPosition": "top"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "image",
+    "density": "spacious",
+    "purpose": "adventure-hero",
+    "imagePattern": "large"
+  },
+  "contentPattern": {
+    "structure": "image-only slides (no overlaid text)",
+    "buttonCount": 0,
+    "imageCount": 1,
+    "slidesObserved": 1
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "adventure / product / article detail hero image slideshows",
+      "full-bleed rotating galleries of images with NO overlaid text",
+      "single or multi-image banners at the top of a detail page"
+    ],
+    "notSuitableFor": [
+      "hero carousels needing overlaid heading/description/CTA per slide (use carousel-hero)",
+      "single non-rotating featured item (use hero)",
+      "grids of distinct items (use cards)"
+    ]
+  },
+  "notes": "New variant derived from the AEM Block Collection 'carousel' block. A DISTINCT name from the existing 'carousel-hero' is used because carousel-hero renders a content card (image + heading + description + CTA) overlaid per slide for the homepage hero and positions its indicators/arrows outside/below the block, whereas this adventure carousel shows a single image per slide with no overlay. Content model: first row = block name; each subsequent row = one cell containing a single image. Adapted for this stripped @adobe/aem-boilerplate: the vanilla 'fetchPlaceholders' (aem.js) and 'moveInstrumentation' (scripts.js) imports and calls were REMOVED because neither is exported in this doc project; aria labels are inlined and no aem.js import is needed. Handles a single slide gracefully (no indicators/arrows).",
+  "usage": {
+    "pagesUsing": ["/us/en/adventures/bali-surf-camp"],
+    "reuseCount": 1,
+    "lastUsed": "2026-08-10T00:00:00.000Z"
+  }
+}

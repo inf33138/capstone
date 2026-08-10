@@ -1,0 +1,32 @@
+.adventure-details .adventure-details-list {
+  margin: 0;
+  padding: 0;
+}
+
+.adventure-details .adventure-details-item {
+  padding: 12px 0;
+  border-left: 2px solid var(--light-color, #dadada);
+  padding-left: 16px;
+  margin-bottom: 16px;
+}
+
+.adventure-details .adventure-details-label {
+  margin: 0;
+  font-size: var(--body-font-size-xs, 0.75rem);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--dark-color, #505050);
+}
+
+.adventure-details .adventure-details-value {
+  margin: 4px 0 0;
+  font-size: var(--body-font-size-m, 1rem);
+  text-transform: uppercase;
+  font-weight: bold;
+  color: var(--text-color, #131313);
+}
+
+.adventure-details .adventure-details-value p {
+  margin: 0;
+}
