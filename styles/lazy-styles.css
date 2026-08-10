@@ -1,5 +1,27 @@
 /* add global styles that can be loaded post LCP here */
 
+/* WKND page titles: the default-content <h1> that titles a listing/section page
+   (FAQs, Magazine, Adventures, About Us) renders in the WKND serif with a short
+   yellow underline accent, matching the source site. The article-title <h1>
+   (inside .section.sidebar) has its own dedicated rule further down and is not
+   affected here. */
+main .default-content-wrapper h1 {
+  font-family: asar, georgia, 'Times New Roman', times, serif;
+  font-weight: 400;
+  font-size: 45px;
+  line-height: 1.2;
+  color: #202020;
+  text-align: left;
+}
+
+main .default-content-wrapper h1::after {
+  content: '';
+  display: block;
+  width: 120px;
+  margin-top: 12px;
+  border-bottom: 2px solid #ffea00;
+}
+
 /* WKND section intros: serif headings for default content that introduces a
    block (e.g. "Recent Articles", "Next Adventures", "Where do you want to go?") */
 main .default-content-wrapper h2,
@@ -170,6 +192,11 @@ main:has(> .section.sidebar) .default-content-wrapper h1 {
   color: #202020;
   margin-top: 0.6em;
   margin-bottom: 0.3em;
+}
+
+/* Article titles have no yellow underline accent (unlike listing-page titles) */
+main:has(> .section.sidebar) .default-content-wrapper h1::after {
+  content: none;
 }
 
 /* Byline (H4 "By …"): compact uppercase sans subtitle */
