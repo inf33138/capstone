@@ -183,22 +183,29 @@ function renderIndexCards(block, entries, limit) {
  * cards block whose only content is a single cell holding a query-index.json
  * path (as plain text or a link). This lets an author make the grid dynamic by
  * simply naming the index in the document — the index is the single source of
- * truth, with no card content hardcoded. Returns { index, limit } or null.
+ * truth, with no card content hardcoded. An optional second row holding a
+ * number caps how many cards render (e.g. 4). Returns { index, limit } or null.
  * @param {Element} block The cards block element
  * @returns {{index:string, limit:number}|null}
  */
 function readAuthoredIndexSource(block) {
   const rows = [...block.children];
-  if (rows.length !== 1) return null; // an index-driven block has just the path row
+  if (rows.length < 1 || rows.length > 2) return null;
   const link = block.querySelector('a[href*="query-index.json"]');
-  const href = link ? link.getAttribute('href') : block.textContent.trim();
+  const href = link ? link.getAttribute('href') : rows[0].textContent.trim();
   if (!href || !/query-index\.json(\?|#|$)/.test(href)) return null;
   // normalise to an absolute site path (strip origin if a full URL was authored)
   let path = href;
   try {
     if (/^https?:/i.test(href)) path = new URL(href).pathname;
   } catch (e) { /* keep href as-is */ }
-  return { index: path, limit: Infinity };
+  // optional second row: a numeric limit
+  let limit = Infinity;
+  if (rows.length === 2) {
+    const n = parseInt(rows[1].textContent.trim(), 10);
+    if (Number.isFinite(n) && n > 0) limit = n;
+  }
+  return { index: path, limit };
 }
 
 /**

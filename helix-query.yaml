@@ -15,6 +15,24 @@ indices:
         select: head > meta[name="description"]
         value: attribute(el, 'content')
 
+  # Adventure detail pages — feeds the homepage "Where do you want to go?" cards.
+  adventures:
+    include:
+      - '/us/en/adventures/**'
+    exclude:
+      - '/us/en/adventures'
+    target: /us/en/adventures/query-index.json
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: attribute(el, 'content')
+      description:
+        select: head > meta[name="description"]
+        value: attribute(el, 'content')
+      image:
+        select: head > meta[property="og:image"]
+        value: attribute(el, 'content')
+
   # Magazine articles — feeds the homepage "Recent Articles" cards, which query
   # this index at runtime (newest first) instead of hard-coding the list.
   magazine:
