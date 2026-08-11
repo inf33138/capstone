@@ -512,6 +512,16 @@ export default async function decorate(block) {
       btn.className = 'nav-link-button';
       btn.textContent = link.textContent.trim();
       if (href) btn.dataset.href = href;
+      // Highlight the nav item for the section the current page belongs to
+      // (e.g. ADVENTURES on /us/en/adventures or any /us/en/adventures/* page).
+      if (href) {
+        const base = href.replace(/\.html$/, '').replace(/\/$/, '');
+        const here = window.location.pathname.replace(/^\/content/, '').replace(/\.html$/, '').replace(/\/$/, '');
+        if (base && (here === base || here.startsWith(`${base}/`))) {
+          btn.classList.add('nav-link-active');
+          btn.setAttribute('aria-current', 'page');
+        }
+      }
       // Main nav items are primary destinations — always navigate in the same
       // tab (ignore any authored target="_blank") so every item behaves
       // consistently, e.g. Magazine -> the magazine page.
