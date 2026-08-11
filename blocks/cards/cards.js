@@ -179,28 +179,66 @@ function renderIndexCards(block, entries, limit) {
 }
 
 /**
- * If this cards grid is configured to be query-index-driven (by section
- * heading), fetch the index and replace the authored rows with the newest
- * entries. On any failure (no index yet, network error, empty result) the
- * authored cards are left in place as a graceful fallback.
+ * Detect an authored query-index source declared inside the block itself: a
+ * cards block whose only content is a single cell holding a query-index.json
+ * path (as plain text or a link). This lets an author make the grid dynamic by
+ * simply naming the index in the document — the index is the single source of
+ * truth, with no card content hardcoded. Returns { index, limit } or null.
+ * @param {Element} block The cards block element
+ * @returns {{index:string, limit:number}|null}
+ */
+function readAuthoredIndexSource(block) {
+  const rows = [...block.children];
+  if (rows.length !== 1) return null; // an index-driven block has just the path row
+  const link = block.querySelector('a[href*="query-index.json"]');
+  const href = link ? link.getAttribute('href') : block.textContent.trim();
+  if (!href || !/query-index\.json(\?|#|$)/.test(href)) return null;
+  // normalise to an absolute site path (strip origin if a full URL was authored)
+  let path = href;
+  try {
+    if (/^https?:/i.test(href)) path = new URL(href).pathname;
+  } catch (e) { /* keep href as-is */ }
+  return { index: path, limit: Infinity };
+}
+
+/**
+ * If this cards grid is query-index-driven, fetch the index and replace the
+ * authored rows with the entries. The source can be declared two ways:
+ *   1. Authored in the block — a single cell naming the query-index.json path
+ *      (the index is the single source of truth; preferred, matches EDS docs).
+ *   2. By section heading via CARD_INDEX_SOURCES (legacy homepage grids).
+ * On any failure (no index yet, network error, empty result) the authored
+ * cards are left in place as a graceful fallback.
  * @param {Element} block The cards block element
  */
 async function populateFromIndex(block) {
-  const section = block.closest('.section');
-  const heading = section && section.querySelector('h1, h2, h3');
-  if (!heading) return;
-  const source = CARD_INDEX_SOURCES[heading.textContent.trim().toLowerCase()];
+  const authored = readAuthoredIndexSource(block);
+  let source = authored;
+  if (!source) {
+    const section = block.closest('.section');
+    const heading = section && section.querySelector('h1, h2, h3');
+    if (!heading) return;
+    source = CARD_INDEX_SOURCES[heading.textContent.trim().toLowerCase()];
+  }
   if (!source) return;
 
+  const before = block.children.length;
   try {
     const resp = await fetch(resolveContentPath(source.index));
-    if (!resp.ok) return;
-    const json = await resp.json();
-    const entries = Array.isArray(json.data) ? json.data : [];
-    renderIndexCards(block, entries, source.limit);
+    if (resp.ok) {
+      const json = await resp.json();
+      const entries = Array.isArray(json.data) ? json.data : [];
+      renderIndexCards(block, entries, source.limit);
+    }
   } catch (e) {
-    // leave the authored cards in place on any error
+    // fall through to the fallback handling below
   }
+
+  // For an AUTHORED index block, the only original content is the path
+  // declaration — never render it as a card. If nothing was rendered (empty
+  // index or fetch failure), clear the declaration so no stray card appears.
+  // Legacy heading-based grids keep their authored cards as a graceful fallback.
+  if (authored && block.children.length === before) block.textContent = '';
 }
 
 export default async function decorate(block) {
