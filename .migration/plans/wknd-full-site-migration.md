@@ -1,9 +1,9 @@
 # WKND Homepage Migration Plan (`/us/en`)
 
-> **Answer to your question:** you are on branch **`main`** (local `main` is in sync with `origin/main` at `322cac8`). This has been the working branch throughout the recent Recent-Articles / query-index work.
+> **Answer to your question:** you are on branch **`main`** (local `main` in sync with `origin/main` on GitHub `inf33138/capstone`, latest commit `7f9f1bd`).
 
 ## Overview
-Migrate the WKND Adventures & Travel **homepage** (`https://wknd.site/us/en.html`) — currently an AEM Core Components (Sites) page — to **AEM Edge Delivery Services**. This is the first deliverable of the broader full-site migration; the homepage establishes the core reusable blocks (carousel, cards, teaser) that later templates will reuse.
+Migrate the WKND Adventures & Travel **homepage** (`https://wknd.site/us/en.html`) — currently an AEM Core Components (Sites) page — to **AEM Edge Delivery Services**. This is the first deliverable of the broader full-site migration; the homepage establishes the core reusable blocks (carousel, cards, teaser) that later templates reuse.
 
 > **This is a plan only.** Execution (scraping, block creation, import) requires switching to **Execute mode**.
 
@@ -70,4 +70,4 @@ Migrate the WKND Adventures & Travel **homepage** (`https://wknd.site/us/en.html
 ## Open Decisions
 - None outstanding for the homepage. Remaining work is the untouched **other-locale** rollout.
 
-*Homepage migration is complete and live on `main`. To take on the deferred locale rollout, switch to Execute mode.*
+*Homepage migration is complete and live on `main` (`7f9f1bd`). To take on the deferred locale rollout, switch to Execute mode.*
