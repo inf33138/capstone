@@ -130,6 +130,17 @@
   position: relative;
 }
 
+/* let the teaser span the full section width (override the 1200px wrapper cap) */
+.section.columns-container:not(.highlight) .columns-wrapper {
+  max-width: none;
+  padding: 0;
+}
+
+.section.columns-container:not(.highlight) .columns > div > .columns-img-col {
+  flex: 0 0 100%;
+  width: 100%;
+}
+
 .section.columns-container:not(.highlight) .columns > div > .columns-img-col img {
   width: 100%;
   height: auto;
