@@ -1,41 +1,36 @@
-# WKND Magazine Page — Dynamic Query-Index Opportunities (`/us/en/magazine`)
+# WKND FAQs Page — Dynamic Query-Index Opportunities (`/us/en/faqs`)
 
 ## Overview
-Identify where the **magazine listing page** can be driven by an EDS **Query Index** (authored single-cell `cards` block naming a `query-index.json` path; index is the single source of truth, no hardcoded fallback) instead of hardcoded content.
+Assess where the **FAQs page** could be driven by an EDS **Query Index** (authored single-cell `cards` block naming a `query-index.json` path; index as single source of truth, no hardcoded fallback) vs. content that should stay authored inline.
 
-> **Plan only.** Authoring the blocks + any index/config changes requires **Execute mode**.
+> **Plan only.** Any block/index changes require **Execute mode**.
 
-## Magazine Page Sections → Query-Index Suitability
+## FAQs Page Sections → Query-Index Suitability
 
 | # | Section | Current | Query-Index candidate? |
 |---|---------|---------|------------------------|
-| 1 | **Featured Article** (`columns`) | Hardcoded single teaser ("Camping in Western Australia") | ⚠️ Possible but low value — it's a single curated teaser in a `columns` block, not a `cards` grid. Would need a "featured" flag in the index + block support. |
-| 2 | **All Articles** (`cards`) | ✅ **Already query-index-driven** — single cell `/us/en/magazine/query-index.json` (4 articles, no fallback). Verified live. | ✅ Done |
-| 3 | **Members Only** heading + text | Static default content | ❌ Not a card grid — leave static |
-| 4 | **Members teasers** (Alaskan Adventure, Fly Fishing the Amazon) | Hardcoded 2 promo cards | ⚠️ Candidate — could be query-index-driven from a "members" index if those pages get migrated + indexed |
+| 1 | **FAQs** H1 | Default-content heading | ❌ Not a grid — static |
+| 2 | **Hero image** | Single image (default content) | ❌ Not a grid — static |
+| 3 | **Intro paragraph** | Default-content text (justified) | ❌ Not a grid — static |
+| 4 | **FAQ accordion** (7 Q&A) | `accordion` block, authored inline | ❌ **Not a fit** — Q&A pairs are authored page content, not a set of published pages. A query index indexes *pages*, not in-page rows. Keep authored. |
+| 5 | **"Need more help?"** contact | Default-content heading + links | ❌ Not a grid — static |
 
-## Where dynamic query indexing applies
-- **Primary (done):** the **"All Articles"** grid — already reads `/us/en/magazine/query-index.json`.
-- **Optional next:** the **"Members Only"** promo cards — drive from a members index once those articles are migrated (currently just static teasers, targets not migrated).
-- **Not applicable:** Featured Article (single teaser) and Members Only heading/text (default content).
+## Verdict
+**No dynamic query indexing applies to the FAQs page.** It has **no card grid of pages** — the only repeating structure is the FAQ accordion, whose items are in-page Q&A content (not published, indexable pages). Query indexing is for grids that list *pages* (articles, adventures), which this page doesn't contain.
 
-## Prerequisites / gaps
-- Magazine index currently holds **4** articles (LA Skateparks, Ski Touring, Arctic Surfing, San Diego Surf). **Western Australia** shows in the source but its article page isn't migrated (404) → absent from index. To include it, migrate + publish that article so it's indexed.
-- Members-only articles (Alaskan Adventure, Fly Fishing the Amazon) are not migrated → no index rows yet.
+The FAQ accordion is correctly authored inline. Making it "dynamic" would require modeling each Q&A as its own page + a FAQ index + an accordion-from-index block — a large, low-value inversion of a simple authored list. Not recommended.
 
 ## Checklist
 
-### Done
-- [x] "All Articles" grid converted to query-index block (`/us/en/magazine/query-index.json`), no fallback — verified on aem.live
-- [x] Magazine query index live with 4 article rows (title, description, image, publishedDate, category)
+### Assessment (done)
+- [x] Review FAQs page sections (H1, hero image, intro, accordion, contact)
+- [x] Determine query-index applicability → **none** (no page-list card grid on this page)
 
-### Available next steps (require Execute mode)
-- [ ] Migrate + publish the **Western Australia** article so it joins the magazine index (then it appears in "All Articles" automatically)
-- [ ] (Optional) Migrate the two **Members Only** articles + add a members query index, then convert the members promo section to a query-index `cards` block
-- [ ] (Optional) Add a **featured** flag to the index + drive the Featured Article teaser from it (only if a dynamic featured slot is wanted over a curated one)
+### Available next steps (require Execute mode) — optional / not recommended
+- [ ] (Not recommended) Model each FAQ as a standalone page + build a FAQ query index + an accordion-from-index block, to drive the accordion dynamically
+- [ ] (Out of scope here) Continue query-index rollout on pages that *do* have page-list grids (already done: homepage, magazine, adventures)
 
 ## Open Decisions
-- Include **Western Australia** in "All Articles"? Requires migrating that article page first.
-- Make **Members Only** promos dynamic? Requires migrating those articles + a members index.
+- None. The FAQs page has no query-index-suitable section; the accordion stays authored inline.
 
-*The magazine page's main list ("All Articles") is already query-index-driven and live. The remaining candidates depend on migrating not-yet-imported articles first — switch to Execute mode to proceed.*
+*The FAQs page has no card grid of pages, so dynamic query indexing does not apply here. The already-completed query-index work covers the pages that do have page grids (homepage, magazine listing, adventures listing). No action needed unless you explicitly want the not-recommended FAQ-from-index inversion — which would require Execute mode.*
