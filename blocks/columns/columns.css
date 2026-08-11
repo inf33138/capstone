@@ -120,3 +120,32 @@
     line-height: 1.5;
   }
 }
+
+/* Adventures "intro teaser": full-width image with a white text panel
+   overlapping its bottom-left (matches the WKND adventures page). Scoped to the
+   non-highlight columns instance so the homepage Featured Article (grey side
+   panel) is unaffected. */
+.section.columns-container:not(.highlight) .columns > div {
+  display: block;
+  position: relative;
+}
+
+.section.columns-container:not(.highlight) .columns > div > .columns-img-col img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.section.columns-container:not(.highlight) .columns > div > div:not(.columns-img-col) {
+  background: #fff;
+  padding: 32px 36px;
+}
+
+@media (width >= 900px) {
+  .section.columns-container:not(.highlight) .columns > div > div:not(.columns-img-col) {
+    position: relative;
+    width: 70%;
+    margin: -80px 0 0;
+    padding: 40px 48px;
+  }
+}
