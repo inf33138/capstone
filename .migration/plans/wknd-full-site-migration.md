@@ -1,73 +1,41 @@
-# WKND Homepage Migration Plan (`/us/en`)
-
-> **Answer to your question:** you are on branch **`main`** (local `main` in sync with `origin/main` on GitHub `inf33138/capstone`, latest commit `7f9f1bd`).
+# WKND Magazine Page — Dynamic Query-Index Opportunities (`/us/en/magazine`)
 
 ## Overview
-Migrate the WKND Adventures & Travel **homepage** (`https://wknd.site/us/en.html`) — currently an AEM Core Components (Sites) page — to **AEM Edge Delivery Services**. This is the first deliverable of the broader full-site migration; the homepage establishes the core reusable blocks (carousel, cards, teaser) that later templates reuse.
+Identify where the **magazine listing page** can be driven by an EDS **Query Index** (authored single-cell `cards` block naming a `query-index.json` path; index is the single source of truth, no hardcoded fallback) instead of hardcoded content.
 
-> **This is a plan only.** Execution (scraping, block creation, import) requires switching to **Execute mode**.
+> **Plan only.** Authoring the blocks + any index/config changes requires **Execute mode**.
 
-## Scope
-**Homepage first.** Migrate `/us/en.html` end-to-end (content + styling + local preview parity). Global header/footer and remaining site templates follow in later passes (tracked under "Deferred" below).
+## Magazine Page Sections → Query-Index Suitability
 
-## Homepage Structure → EDS Block Mapping
+| # | Section | Current | Query-Index candidate? |
+|---|---------|---------|------------------------|
+| 1 | **Featured Article** (`columns`) | Hardcoded single teaser ("Camping in Western Australia") | ⚠️ Possible but low value — it's a single curated teaser in a `columns` block, not a `cards` grid. Would need a "featured" flag in the index + block support. |
+| 2 | **All Articles** (`cards`) | ✅ **Already query-index-driven** — single cell `/us/en/magazine/query-index.json` (4 articles, no fallback). Verified live. | ✅ Done |
+| 3 | **Members Only** heading + text | Static default content | ❌ Not a card grid — leave static |
+| 4 | **Members teasers** (Alaskan Adventure, Fly Fishing the Amazon) | Hardcoded 2 promo cards | ⚠️ Candidate — could be query-index-driven from a "members" index if those pages get migrated + indexed |
 
-| # | Section | Source content | Proposed EDS block |
-|---|---------|----------------|--------------------|
-| 1 | **Header / Nav** | WKND logo, language selector (`en-US`), search, menu (Home, Magazine, Adventures, FAQs, About Us) | Global `header` (nav) — *done* |
-| 2 | **Hero Carousel** | 3 slides: "WKND Adventures" + intro + *View Trips* CTA + bushland image; San Diego Surf Spots; Downhill Skiing Wyoming. Prev/Next + dots | `carousel-hero` |
-| 3 | **Featured Article** | Eyebrow "Featured Article", heading "Camping in Western Australia", body, *Full Article* CTA, canyon image | `columns` |
-| 4 | **Recent Articles** | Heading + 4 article cards; *All Articles* link | `cards` (query-index-driven) |
-| 5 | **Divider + "Next Adventures"** | Separator + section heading | Section break / default-content heading |
-| 6 | **Featured Adventure** | Heading "Climbing New Zealand", body, *See Trip* CTA, climbing image | `hero` |
-| 7 | **Adventures Grid** | Heading "Where do you want to go?" + 4 trip cards; *All Trips* link | `cards` |
-| 8 | **Footer** | Light logo, footer nav, "Follow Us" social icons, © 2019 + Adobe/AEM disclaimer | Global `footer` — *done* |
+## Where dynamic query indexing applies
+- **Primary (done):** the **"All Articles"** grid — already reads `/us/en/magazine/query-index.json`.
+- **Optional next:** the **"Members Only"** promo cards — drive from a members index once those articles are migrated (currently just static teasers, targets not migrated).
+- **Not applicable:** Featured Article (single teaser) and Members Only heading/text (default content).
 
-## Core Blocks (from this page)
-- **carousel-hero** — hero (3 slides: image + heading + body + single CTA).
-- **cards** — reused for the articles grid and adventures grid; the Recent Articles instance is **query-index-driven** (authored single-cell path `/us/en/magazine/query-index.json`, no hardcoded content, no fallback).
-- **columns / hero** — image + eyebrow + heading + body + single CTA (Featured Article / Featured Adventure).
+## Prerequisites / gaps
+- Magazine index currently holds **4** articles (LA Skateparks, Ski Touring, Arctic Surfing, San Diego Surf). **Western Australia** shows in the source but its article page isn't migrated (404) → absent from index. To include it, migrate + publish that article so it's indexed.
+- Members-only articles (Alaskan Adventure, Fly Fishing the Amazon) are not migrated → no index rows yet.
 
 ## Checklist
 
-### Phase 0 — Prep
-- [x] Fetch & render homepage; capture full structure
-- [x] Map each section to an EDS block
-- [x] Confirm scope (homepage first)
+### Done
+- [x] "All Articles" grid converted to query-index block (`/us/en/magazine/query-index.json`), no fallback — verified on aem.live
+- [x] Magazine query index live with 4 article rows (title, description, image, publishedDate, category)
 
-### Phase 1 — Block palette
-- [x] Determine project type (doc / da / xwalk) and block-library endpoint
-- [x] Survey local + Block Collection blocks; match sections to existing blocks or flag new
-- [x] Model content structures for carousel, cards, teaser/columns
-
-### Phase 2 — Homepage migration
-- [x] Scrape `/us/en.html` (images, metadata, cleaned HTML)
-- [x] Identify section boundaries; classify default content vs. blocks
-- [x] Build page-template skeleton + block mappings
-- [x] Generate import infrastructure + bundled import script
-- [x] Run import → homepage content file
-- [x] Preview locally and compare to original
-- [x] Iterate block CSS/JS to match source
-
-### Phase 3 — Chrome & dynamic content
-- [x] Migrate global header/nav (logo, menu, language selector, search autocomplete)
-- [x] Migrate global footer (logo, nav, social icons, copyright)
-- [x] Apply homepage design tokens (serif titles, yellow accents) to global/block CSS
-- [x] Make Recent Articles query-index-driven (magazine index, newest-first, no fallback) — verified on aem.live
-
-### Phase 4 — QA & publish
-- [x] Visual critique vs. original; fix gaps
-- [x] Lint (`npm run lint`) clean
-- [x] Verify internal links resolve
-- [x] Push to `main`; Code Sync deployed; verified on `main--capstone--inf33138.aem.live`
-
-## Deferred (later passes, full-site)
-- Adventures listing + 16 adventure detail pages — **done** (migrated & published)
-- Magazine listing + articles — **done** (separate PR)
-- FAQs / About Us static pages — **done**
-- Other locales (CA, CH, DE, FR, ES, IT) reusing the same templates — *not started*
+### Available next steps (require Execute mode)
+- [ ] Migrate + publish the **Western Australia** article so it joins the magazine index (then it appears in "All Articles" automatically)
+- [ ] (Optional) Migrate the two **Members Only** articles + add a members query index, then convert the members promo section to a query-index `cards` block
+- [ ] (Optional) Add a **featured** flag to the index + drive the Featured Article teaser from it (only if a dynamic featured slot is wanted over a curated one)
 
 ## Open Decisions
-- None outstanding for the homepage. Remaining work is the untouched **other-locale** rollout.
+- Include **Western Australia** in "All Articles"? Requires migrating that article page first.
+- Make **Members Only** promos dynamic? Requires migrating those articles + a members index.
 
-*Homepage migration is complete and live on `main` (`7f9f1bd`). To take on the deferred locale rollout, switch to Execute mode.*
+*The magazine page's main list ("All Articles") is already query-index-driven and live. The remaining candidates depend on migrating not-yet-imported articles first — switch to Execute mode to proceed.*
