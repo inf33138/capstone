@@ -86,7 +86,7 @@ function addAdventureFilters(block, ul) {
 // section heading (lower-cased). Only grids listed here are truncated; all
 // other cards blocks (adventures listing, magazine) keep their full copy.
 const CARD_DESC_LIMITS = {
-  'recent articles': 34,
+  'recent articles': 33,
   'where do you want to go?': 34,
 };
 
