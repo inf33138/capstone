@@ -139,6 +139,7 @@
 .section.columns-container:not(.highlight) .columns > div > div:not(.columns-img-col) {
   background: #fff;
   padding: 32px 36px;
+  text-align: center;
 }
 
 @media (width >= 900px) {
