@@ -88,6 +88,7 @@ function addAdventureFilters(block, ul) {
 const CARD_DESC_LIMITS = {
   'recent articles': 34,
   'where do you want to go?': 34,
+  'all articles': 34,
 };
 
 /**
