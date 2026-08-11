@@ -147,14 +147,10 @@
   object-fit: cover;
 }
 
-.section.columns-container:not(.highlight) .columns > div > div:not(.columns-img-col) h2 {
-  text-align: left;
-}
-
 .section.columns-container:not(.highlight) .columns > div > div:not(.columns-img-col) {
   background: #fff;
   padding: 32px 36px;
-  text-align: center;
+  text-align: left;
 }
 
 @media (width >= 900px) {
