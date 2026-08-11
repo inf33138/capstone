@@ -132,7 +132,7 @@
 
 .section.columns-container:not(.highlight) .columns > div > .columns-img-col img {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
 }
 
