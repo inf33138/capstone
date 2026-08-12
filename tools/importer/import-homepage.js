@@ -57,6 +57,17 @@ const parsers = {
   hero: heroParser,
 };
 
+// QUERY-INDEX GRIDS: the two homepage `cards` grids are dynamic (index-driven).
+// The WKND source ships static image-lists here, so scraping them would
+// overwrite the authored single-cell query-index blocks on every re-import.
+// Emitting the index blocks instead makes the import idempotent.
+//   1st cards instance = Recent Articles (magazine index, 4)
+//   2nd cards instance = Where do you want to go? (adventures index, 4)
+const CARD_INDEX_GRIDS = {
+  'main.cmp-layout-container--fixed:nth-of-type(1) div.image-list.list': { index: '/us/en/magazine/query-index.json', limit: 4 },
+  'main.cmp-layout-container--fixed:nth-of-type(2) div.image-list.list': { index: '/us/en/adventures/query-index.json', limit: 4 },
+};
+
 // TRANSFORMER REGISTRY - cleanup runs first, sections after
 const transformers = [
   cleanupTransformer,
@@ -132,6 +143,18 @@ export default {
     // 3. Parse each block using registered parsers
     pageBlocks.forEach((block) => {
       if (!block.element.parentNode) return; // Already replaced by earlier parser
+      // Query-index-driven grids: emit a single-cell index block instead of
+      // scraping the hardcoded cards, so re-imports stay idempotent.
+      const idx = block.name === 'cards' && CARD_INDEX_GRIDS[block.selector];
+      if (idx) {
+        // createBlock puts the name in the block's class; cells are the rows.
+        // Row 1 = index path, optional row 2 = limit (the authored contract
+        // readAuthoredIndexSource expects). Do NOT add a literal name row.
+        const cells = [[idx.index]];
+        if (idx.limit) cells.push([String(idx.limit)]);
+        block.element.replaceWith(WebImporter.Blocks.createBlock(document, { name: 'cards', cells }));
+        return;
+      }
       const parser = parsers[block.name];
       if (parser) {
         try {

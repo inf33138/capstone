@@ -1,26 +1,8 @@
-/* eslint-disable */
 var CustomImportScript = (() => {
   var __defProp = Object.defineProperty;
-  var __defProps = Object.defineProperties;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-  var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
   var __getOwnPropNames = Object.getOwnPropertyNames;
-  var __getOwnPropSymbols = Object.getOwnPropertySymbols;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __propIsEnum = Object.prototype.propertyIsEnumerable;
-  var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-  var __spreadValues = (a, b) => {
-    for (var prop in b || (b = {}))
-      if (__hasOwnProp.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    if (__getOwnPropSymbols)
-      for (var prop of __getOwnPropSymbols(b)) {
-        if (__propIsEnum.call(b, prop))
-          __defNormalProp(a, prop, b[prop]);
-      }
-    return a;
-  };
-  var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
   var __export = (target, all) => {
     for (var name in all)
       __defProp(target, name, { get: all[name], enumerable: true });
@@ -103,6 +85,14 @@ var CustomImportScript = (() => {
     afterTransform: "afterTransform"
   };
   function transform(hookName, element, payload) {
+    if (hookName === TransformHook.beforeTransform) {
+      element.querySelectorAll(".tabs.panelcontainer").forEach((tabs) => {
+        const isCategoryFilter = tabs.querySelector(".cmp-tabs__tabpanel .image-list");
+        if (!isCategoryFilter) return;
+        tabs.querySelectorAll(".cmp-tabs__tablist").forEach((el) => el.remove());
+        tabs.querySelectorAll(".cmp-tabs__tabpanel:not(.cmp-tabs__tabpanel--active)").forEach((el) => el.remove());
+      });
+    }
     if (hookName === TransformHook.afterTransform) {
       WebImporter.DOMUtils.remove(element, [
         "header.experiencefragment.cmp-experiencefragment--header",
@@ -206,14 +196,18 @@ var CustomImportScript = (() => {
     columns: parse,
     cards: parse2
   };
+  var CARD_INDEX_GRIDS = {
+    "main div.image-list.list": { index: "/us/en/magazine/query-index.json" }
+  };
   var transformers = [
     transform,
     ...PAGE_TEMPLATE.sections && PAGE_TEMPLATE.sections.length > 1 ? [transform2] : []
   ];
   function executeTransformers(hookName, element, payload) {
-    const enhancedPayload = __spreadProps(__spreadValues({}, payload), {
+    const enhancedPayload = {
+      ...payload,
       template: PAGE_TEMPLATE
-    });
+    };
     transformers.forEach((transformerFn) => {
       try {
         transformerFn.call(null, hookName, element, enhancedPayload);
@@ -256,6 +250,13 @@ var CustomImportScript = (() => {
       const pageBlocks = findBlocksOnPage(document, PAGE_TEMPLATE);
       pageBlocks.forEach((block) => {
         if (!block.element.parentNode) return;
+        const idx = block.name === "cards" && CARD_INDEX_GRIDS[block.selector];
+        if (idx) {
+          const cells = [[idx.index]];
+          if (idx.limit) cells.push([String(idx.limit)]);
+          block.element.replaceWith(WebImporter.Blocks.createBlock(document, { name: "cards", cells }));
+          return;
+        }
         const parser = parsers[block.name];
         if (parser) {
           try {
