@@ -5,43 +5,43 @@
   "data": [
     {
       "name": "Accordion",
-      "path": "/block-library/accordion"
+      "path": "https://main--capstone--inf33138.aem.live/block-library/accordion"
     },
     {
       "name": "Adventure Details",
-      "path": "/block-library/adventure-details"
+      "path": "https://main--capstone--inf33138.aem.live/block-library/adventure-details"
     },
     {
       "name": "Cards",
-      "path": "/block-library/cards"
+      "path": "https://main--capstone--inf33138.aem.live/block-library/cards"
     },
     {
       "name": "Cards Author",
-      "path": "/block-library/cards-author"
+      "path": "https://main--capstone--inf33138.aem.live/block-library/cards-author"
     },
     {
       "name": "Cards Profile",
-      "path": "/block-library/cards-profile"
+      "path": "https://main--capstone--inf33138.aem.live/block-library/cards-profile"
     },
     {
       "name": "Carousel Adventure",
-      "path": "/block-library/carousel-adventure"
+      "path": "https://main--capstone--inf33138.aem.live/block-library/carousel-adventure"
     },
     {
       "name": "Carousel Hero",
-      "path": "/block-library/carousel-hero"
+      "path": "https://main--capstone--inf33138.aem.live/block-library/carousel-hero"
     },
     {
       "name": "Columns",
-      "path": "/block-library/columns"
+      "path": "https://main--capstone--inf33138.aem.live/block-library/columns"
     },
     {
       "name": "Hero",
-      "path": "/block-library/hero"
+      "path": "https://main--capstone--inf33138.aem.live/block-library/hero"
     },
     {
       "name": "Tabs",
-      "path": "/block-library/tabs"
+      "path": "https://main--capstone--inf33138.aem.live/block-library/tabs"
     }
   ],
   "columns": [
