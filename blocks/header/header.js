@@ -271,13 +271,15 @@ function decorateSearch(container) {
 function decorateLocalePanel(navDrop) {
   if (!navDrop) return;
   const panel = navDrop.querySelector(':scope > ul');
-  // only the locale selector has per-row flags; skip plain nav dropdowns
-  if (!panel || !panel.querySelector(':scope > li > p > img')) return;
+  // only the locale selector has per-row flags; skip plain nav dropdowns.
+  // EDS may wrap the flag in a <picture>, so match both p>img and p>picture>img.
+  if (!panel || !panel.querySelector(':scope > li > p > img, :scope > li > p > picture > img')) return;
   panel.classList.add('locale-panel');
   panel.querySelectorAll(':scope > li').forEach((row) => {
     row.classList.add('locale-row');
     const label = row.querySelector(':scope > p');
-    const flag = label && label.querySelector('img');
+    // move the whole <picture> (or bare <img>) so the flag becomes the left cell
+    const flag = label && (label.querySelector(':scope > picture') || label.querySelector(':scope > img'));
     if (flag) {
       flag.classList.add('locale-flag');
       row.insertBefore(flag, row.firstChild); // flag becomes the grid's left cell
