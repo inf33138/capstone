@@ -1,0 +1,19 @@
+{
+  "project": "WKND Capstone",
+  "library": [
+    {
+      "text": "Blocks",
+      "path": "/tools/sidekick/library.json",
+      "icon": "blocks"
+    }
+  ],
+  "plugins": [
+    {
+      "id": "library",
+      "title": "Library",
+      "environments": ["edit"],
+      "url": "https://main--sta-boilerplate--aemdemos.aem.live/tools/sidekick/library.html",
+      "includePaths": ["**.docx**"]
+    }
+  ]
+}
