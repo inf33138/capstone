@@ -298,8 +298,14 @@ function decorateLocalePanel(navDrop) {
  * @param {Element} host The element the panel is appended to (nav-wrapper)
  */
 function decorateSignIn(navUtility, host) {
-  const link = navUtility && navUtility.querySelector('a[href="#sign-in"]');
-  if (!link || !host) return;
+  if (!navUtility || !host) return;
+  // Find the "Sign In" control. Prefer the intended #sign-in anchor, but fall
+  // back to matching by label so a reverted nav fragment (where the href slips
+  // back to "/" or similar) still yields the toggle — the decoration is driven
+  // by code, not by the authored href, so it survives DA content reverts.
+  const link = navUtility.querySelector('a[href="#sign-in"]')
+    || [...navUtility.querySelectorAll('a')].find((a) => a.textContent.trim().toLowerCase() === 'sign in');
+  if (!link) return;
 
   // Replace the fragment's anchor with a real <button> (the fragment can't hold
   // a <button>, so it's created here). A button is the correct control for
