@@ -119,8 +119,20 @@ function truncateCardDescriptions(block, ul) {
 // Query-index-driven card grids. Instead of hard-coding the card list, the
 // listed grids fetch a published query-index.json at runtime and render the
 // newest N entries. Keyed by section heading (lower-cased).
+//
+// This heading-based mapping is a resilience net: the WKND source (and the
+// import pipeline that regenerates the authored docs) ships HARDCODED cards, so
+// a re-import can revert an authored single-cell index block back to static
+// cards. When that happens, the heading match below still kicks in at runtime
+// and replaces the hardcoded cards with index-driven ones — the hardcoded cards
+// survive only as a fallback if the index is unreachable. An authored
+// single-cell index block (readAuthoredIndexSource) always takes precedence
+// over this mapping when present. Omit `limit` to render every entry.
 const CARD_INDEX_SOURCES = {
   'recent articles': { index: '/us/en/magazine/query-index.json', limit: 4 },
+  'where do you want to go?': { index: '/us/en/adventures/query-index.json', limit: 4 },
+  'all articles': { index: '/us/en/magazine/query-index.json' },
+  'current adventures': { index: '/us/en/adventures/query-index.json' },
 };
 
 /**
