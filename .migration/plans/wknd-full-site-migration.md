@@ -1,36 +1,61 @@
-# WKND FAQs Page — Dynamic Query-Index Opportunities (`/us/en/faqs`)
+# WKND — Where the Dynamic Query-Indexing Changes Live
 
 ## Overview
-Assess where the **FAQs page** could be driven by an EDS **Query Index** (authored single-cell `cards` block naming a `query-index.json` path; index as single source of truth, no hardcoded fallback) vs. content that should stay authored inline.
+A map of every piece of the **dynamic query-index** work delivered across the WKND migration — the code, the index config, and the authored blocks — so you can find each part. Dynamic query indexing = an authored `cards` block whose single cell names a `query-index.json` path; at runtime the block fetches that index and renders the newest N entries (index = single source of truth, no hardcoded fallback).
 
-> **Plan only.** Any block/index changes require **Execute mode**.
+> **Plan/inventory only** — this is a locator, not new work. No changes needed.
 
-## FAQs Page Sections → Query-Index Suitability
+## 1. Index configuration — `helix-query.yaml`
+Defines the three published indices the dynamic grids read from:
 
-| # | Section | Current | Query-Index candidate? |
-|---|---------|---------|------------------------|
-| 1 | **FAQs** H1 | Default-content heading | ❌ Not a grid — static |
-| 2 | **Hero image** | Single image (default content) | ❌ Not a grid — static |
-| 3 | **Intro paragraph** | Default-content text (justified) | ❌ Not a grid — static |
-| 4 | **FAQ accordion** (7 Q&A) | `accordion` block, authored inline | ❌ **Not a fit** — Q&A pairs are authored page content, not a set of published pages. A query index indexes *pages*, not in-page rows. Keep authored. |
-| 5 | **"Need more help?"** contact | Default-content heading + links | ❌ Not a grid — static |
+| Index | Target JSON | Feeds |
+|-------|-------------|-------|
+| `pages` | `/query-index.json` | Header **search autocomplete** (site-wide, title + description) |
+| `adventures` | `/us/en/adventures/query-index.json` | Adventures listing **"Current Adventures"** grid (16 detail pages) |
+| `magazine` | `/us/en/magazine/query-index.json` | Homepage **"Recent Articles"** + magazine **"All Articles"** (title, description, image, publishedDate) |
 
-## Verdict
-**No dynamic query indexing applies to the FAQs page.** It has **no card grid of pages** — the only repeating structure is the FAQ accordion, whose items are in-page Q&A content (not published, indexable pages). Query indexing is for grids that list *pages* (articles, adventures), which this page doesn't contain.
+## 2. Runtime rendering logic — `blocks/cards/cards.js`
+The engine that turns an authored index reference into a live card grid:
+- **`readAuthoredIndexSource(block)`** (line ~193) — detects an authored single-cell block naming a `query-index.json` path (text or link); optional 2nd cell = numeric limit. This is the **preferred, index-as-source-of-truth** path.
+- **`CARD_INDEX_SOURCES`** (line ~122) — legacy heading-based mapping (`recent articles` → magazine index, limit 4).
+- **`populateFromIndex(block)`** (line ~223) — fetches the index, renders entries; for an authored index block it clears the cell if the index is empty/unreachable (no stray fallback card).
+- **`renderIndexCards()`** (line ~147) — builds `[image][body]` rows, sorted by `publishedDate` newest-first.
+- **`resolveContentPath()`** (line ~133) — rebases paths for dev vs preview/live.
+- **`addAdventureFilters()` / `truncateCardDescriptions()`** — the category filter tabs + description truncation layered on top.
 
-The FAQ accordion is correctly authored inline. Making it "dynamic" would require modeling each Q&A as its own page + a FAQ index + an accordion-from-index block — a large, low-value inversion of a simple authored list. Not recommended.
+## 3. Search autocomplete — `blocks/header/header.js`
+Uses the site-wide `/query-index.json` (via the `pages` index) to power the header search suggestions dropdown.
+
+## 4. The authored index blocks — **in Document Authoring (da.live), not in git**
+This is the key thing to know about "where they are": the single-cell `cards` blocks that *name* the index paths are **authored content**, published to the live site through Document Authoring. They are **not** in the local `content/` mirror — a grep of `content/` for `query-index.json` returns nothing because that folder holds the pre-index import snapshots. The live authored docs carrying the index blocks are:
+- Homepage `/us/en` — **"Recent Articles"** + **"Where do you want to go?"** grids
+- Magazine `/us/en/magazine` — **"All Articles"** grid
+- Adventures `/us/en/adventures` — **"Current Adventures"** grid
+
+## Where each dynamic grid ends up (live)
+| Page | Grid | Index used | State |
+|------|------|-----------|-------|
+| Homepage | Recent Articles | `/us/en/magazine/query-index.json` | ✅ live |
+| Homepage | Where do you want to go? | `/us/en/adventures/query-index.json` | ✅ live |
+| Magazine | All Articles | `/us/en/magazine/query-index.json` | ✅ live |
+| Adventures | Current Adventures | `/us/en/adventures/query-index.json` | ✅ live |
+| Header (all pages) | Search autocomplete | `/query-index.json` | ✅ live |
+| **FAQs** | — | — | ❌ n/a (no page-list grid) |
 
 ## Checklist
 
-### Assessment (done)
-- [x] Review FAQs page sections (H1, hero image, intro, accordion, contact)
-- [x] Determine query-index applicability → **none** (no page-list card grid on this page)
+### Where to look (reference)
+- [x] Index config → `helix-query.yaml` (3 indices: pages, adventures, magazine)
+- [x] Render engine → `blocks/cards/cards.js` (`readAuthoredIndexSource`, `populateFromIndex`, `renderIndexCards`)
+- [x] Search autocomplete → `blocks/header/header.js` (reads `/query-index.json`)
+- [x] Authored index blocks → **Document Authoring (da.live)** on homepage, magazine, adventures — *not* in the git `content/` mirror
+- [x] FAQs page → no dynamic query indexing (no card-grid of pages)
 
-### Available next steps (require Execute mode) — optional / not recommended
-- [ ] (Not recommended) Model each FAQ as a standalone page + build a FAQ query index + an accordion-from-index block, to drive the accordion dynamically
-- [ ] (Out of scope here) Continue query-index rollout on pages that *do* have page-list grids (already done: homepage, magazine, adventures)
+### Optional verification (requires Execute mode)
+- [ ] Confirm live row counts per index (`curl` each `query-index.json` on `aem.live`)
+- [ ] Confirm each live page's grid serves an index block (fetch `.plain.html` and check for the single-cell `cards` block)
 
 ## Open Decisions
-- None. The FAQs page has no query-index-suitable section; the accordion stays authored inline.
+- None — this is a locator for existing, deployed work. Say the word (and switch to Execute mode) if you want me to run the live verification checks above or add a dynamic grid to another page.
 
-*The FAQs page has no card grid of pages, so dynamic query indexing does not apply here. The already-completed query-index work covers the pages that do have page grids (homepage, magazine listing, adventures listing). No action needed unless you explicitly want the not-recommended FAQ-from-index inversion — which would require Execute mode.*
+*Your dynamic query-indexing changes live in three places: `helix-query.yaml` (index definitions), `blocks/cards/cards.js` + `blocks/header/header.js` (runtime logic), and the authored single-cell blocks in Document Authoring on the homepage/magazine/adventures pages (not in the git `content/` folder). The FAQs page has none because it has no page-list grid.*
