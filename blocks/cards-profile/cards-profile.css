@@ -61,7 +61,7 @@
   margin: 16px 0 0;
   padding: 0;
   display: flex;
-  gap: 8px;
+  gap: 0;
 }
 
 .cards-profile .cards-profile-social-link {
@@ -72,10 +72,27 @@
   height: 36px;
   background-color: #35383e;
   color: #fff;
-  font-size: 12px;
-  line-height: 36px;
   text-decoration: none;
   overflow: hidden;
+  transition: background-color 0.15s ease;
+}
+
+.cards-profile .cards-profile-social-link svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* keep the platform name available to assistive tech, hidden visually */
+.cards-profile .cards-profile-social-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
   white-space: nowrap;
 }
 
