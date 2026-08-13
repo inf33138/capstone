@@ -35,6 +35,15 @@ const parsers = {
   accordion: accordionParser,
 };
 
+// SHEET-DRIVEN ACCORDIONS: which `accordion` instances are backed by a data
+// sheet (single source of truth) rather than hardcoded Q&A rows. Keyed by the
+// block instance selector. The WKND source ships a hardcoded Q&A accordion, so
+// scraping it would overwrite the authored single-cell sheet reference on every
+// re-import. Emitting the sheet block instead keeps re-imports idempotent.
+const ACCORDION_INDEX_GRIDS = {
+  'main div.accordion.panelcontainer': { index: '/us/en/faqs/faqs.json' },
+};
+
 // TRANSFORMER REGISTRY - cleanup runs first, sections after
 const transformers = [
   cleanupTransformer,
@@ -110,6 +119,15 @@ export default {
     // 3. Parse each block using registered parsers
     pageBlocks.forEach((block) => {
       if (!block.element.parentNode) return; // Already replaced by earlier parser
+      // Sheet-driven accordions: emit a single-cell index block naming the data
+      // sheet instead of scraping the hardcoded Q&A rows, so re-imports stay
+      // idempotent (createBlock puts the name in the class; the one cell is the
+      // sheet path the accordion block reads at runtime).
+      const idx = block.name === 'accordion' && ACCORDION_INDEX_GRIDS[block.selector];
+      if (idx) {
+        block.element.replaceWith(WebImporter.Blocks.createBlock(document, { name: 'accordion', cells: [[idx.index]] }));
+        return;
+      }
       const parser = parsers[block.name];
       if (parser) {
         try {
