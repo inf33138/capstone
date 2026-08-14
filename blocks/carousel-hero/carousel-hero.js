@@ -91,16 +91,6 @@ let carouselId = 0;
 export default async function decorate(block) {
   carouselId += 1;
   block.setAttribute('id', `carousel-hero-${carouselId}`);
-
-  // The AEM media pipeline delivers authored image titles as `data-title` on the
-  // live backend (the standard `title` attribute is stripped). Promote it back to
-  // `title` so the native hover tooltip renders, matching the source site.
-  block.querySelectorAll('img[data-title]').forEach((img) => {
-    if (!img.getAttribute('title')) {
-      img.setAttribute('title', img.getAttribute('data-title'));
-    }
-  });
-
   const rows = block.querySelectorAll(':scope > div');
   const isSingleSlide = rows.length < 2;
 

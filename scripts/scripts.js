@@ -227,6 +227,24 @@ function decorateMembersTeasers(main) {
 }
 
 /**
+ * Restores native hover tooltips on images. The AEM media pipeline delivers
+ * authored image titles as `data-title` on the published backend (the standard
+ * `title` attribute is stripped), so the browser's native tooltip never renders
+ * on preview/live even though the authored content is correct. Promote
+ * `data-title` back to `title` for every image so the tooltip matches the
+ * source site. Runs in decorateMain (before block decoration), so it applies to
+ * images across all blocks and default content in one place.
+ * @param {Element} main The main element
+ */
+function decorateImageTitles(main) {
+  main.querySelectorAll('img[data-title]').forEach((img) => {
+    if (!img.getAttribute('title')) {
+      img.setAttribute('title', img.getAttribute('data-title'));
+    }
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -239,6 +257,7 @@ export function decorateMain(main) {
   decorateBlocks(main);
   decorateButtons(main);
   decorateMembersTeasers(main);
+  decorateImageTitles(main);
 }
 
 /**
