@@ -349,27 +349,36 @@ main:has(> .section.sidebar) > .section.sidebar ul {
 }
 
 main:has(> .section.sidebar) > .section.sidebar ul li {
-  padding: 12px 0;
-  border-top: 1px solid #ebebeb;
+  margin-bottom: 1em;
   line-height: 1.4;
 }
 
+/* Related-article link: a card with a light-grey left rail that turns into a
+   bright yellow box with a black rail on hover, matching wknd.site. */
 main:has(> .section.sidebar) > .section.sidebar ul li a {
+  display: block;
+  padding: 0.5rem 1rem;
+  border-left: 5px solid #ebebeb;
   color: #202020;
   text-decoration: none;
   font-weight: 600;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 main:has(> .section.sidebar) > .section.sidebar ul li a:hover {
-  color: var(--link-color);
-  text-decoration: underline;
+  background: #ffea00;
+  border-left-color: #202020;
+  color: #202020;
+  text-decoration: none;
 }
 
-/* Related-article link: bold title on its own line, smaller grey uppercase
-   date beneath (split into .related-title / .related-date in scripts.js). */
+/* Related-article link: bold uppercase title on its own line, smaller grey
+   uppercase date beneath (split into .related-title / .related-date in
+   scripts.js). */
 main:has(> .section.sidebar) > .section.sidebar ul li a .related-title {
   display: block;
   font-weight: 600;
+  text-transform: uppercase;
 }
 
 main:has(> .section.sidebar) > .section.sidebar ul li a .related-date {
