@@ -229,7 +229,7 @@ main:has(> .section.sidebar) .default-content-wrapper h4 {
 /* Body copy: airy line-height like the source article column */
 main:has(> .section.sidebar) .default-content-wrapper p {
   font-size: var(--body-font-size-m);
-  line-height: 2;
+  line-height: 2.4;
   color: #202020;
   margin-bottom: 0.75em;
 }
