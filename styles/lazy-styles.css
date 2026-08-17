@@ -353,10 +353,17 @@ main:has(> .section.sidebar) > .section.sidebar ul li {
   line-height: 1.4;
 }
 
-/* Related-article link: a card with a light-grey left rail that turns into a
-   bright yellow box with a black rail on hover, matching wknd.site. */
+/* Related-article link: a fixed-size (263x136) card with a light-grey left
+   rail that turns into a bright yellow box with a black rail on hover, matching
+   wknd.site. Content is vertically centered within the box. */
 main:has(> .section.sidebar) > .section.sidebar ul li a {
-  display: block;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 263px;
+  max-width: 100%;
+  height: 136px;
   padding: 0.5rem 1rem;
   border-left: 5px solid #ebebeb;
   color: #202020;
