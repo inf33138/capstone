@@ -227,6 +227,58 @@ function decorateMembersTeasers(main) {
 }
 
 /**
+ * On magazine article pages (two-column sidebar layout), lifts the lead image
+ * out of the article body and into its own full-width block at the top of
+ * `main`, so the hero spans the full content width above both columns — like
+ * the source site — instead of being confined to the narrow article column.
+ * Scoped to sidebar-layout pages whose first section opens with an image-only
+ * paragraph (the article lead image); any other page is left untouched.
+ * @param {Element} main The main element
+ */
+function decorateArticleHero(main) {
+  if (!main.querySelector(':scope > .section.sidebar')) return; // article pages only
+  if (main.querySelector(':scope > .article-hero')) return; // already done
+  const firstSection = main.querySelector(':scope > .section');
+  const wrapper = firstSection && firstSection.querySelector(':scope > .default-content-wrapper');
+  const lead = wrapper && wrapper.firstElementChild;
+  // lead must be a paragraph whose only content is an image (no stray text)
+  if (!lead || lead.tagName !== 'P' || !lead.querySelector('picture, img') || lead.textContent.trim()) return;
+  const hero = document.createElement('div');
+  hero.className = 'article-hero';
+  hero.append(lead);
+  main.prepend(hero);
+}
+
+/**
+ * Splits each "Share This Story" related-article link (a sidebar list on
+ * magazine articles) into a bold title line and a smaller grey date line, so it
+ * renders stacked like the source site instead of title + date run together on
+ * one line. The authored link text is a single string ("Western Australia
+ * Thursday, 9 Jul 2020"); the date always begins with a weekday name, which is
+ * used as the split point. Links without a trailing weekday date are left as-is,
+ * so ordinary sidebar links are untouched.
+ * @param {Element} main The main element
+ */
+function decorateArticleShareList(main) {
+  const weekday = '(?:Sun|Mon|Tues|Wednes|Thurs|Fri|Satur)day';
+  const re = new RegExp(`^(.*?)\\s+(${weekday},.*)$`);
+  main.querySelectorAll('.section.sidebar ul a').forEach((a) => {
+    if (a.querySelector('.related-title')) return; // already decorated
+    const match = a.textContent.trim().match(re);
+    if (!match) return;
+    const [, titleText, dateText] = match;
+    const title = document.createElement('span');
+    title.className = 'related-title';
+    title.textContent = titleText;
+    const date = document.createElement('span');
+    date.className = 'related-date';
+    date.textContent = dateText;
+    a.textContent = '';
+    a.append(title, date);
+  });
+}
+
+/**
  * Restores native hover tooltips on images. The AEM media pipeline delivers
  * authored image titles as `data-title` on the published backend (the standard
  * `title` attribute is stripped), so the browser's native tooltip never renders
@@ -258,6 +310,8 @@ export function decorateMain(main) {
   decorateButtons(main);
   decorateMembersTeasers(main);
   decorateImageTitles(main);
+  decorateArticleHero(main);
+  decorateArticleShareList(main);
 }
 
 /**

@@ -183,6 +183,22 @@ main .default-content-wrapper .members-teaser .members-teaser-image img {
 
 /* --- Article typography (default content in the Article section) --- */
 
+/* Lead hero image: lifted out of the article column (in scripts.js) so it spans
+   the full content width above the two-column layout, matching the source. */
+main:has(> .section.sidebar) > .article-hero {
+  margin: 0 0 8px;
+}
+
+main:has(> .section.sidebar) > .article-hero p {
+  margin: 0;
+}
+
+main:has(> .section.sidebar) > .article-hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 /* Article title: serif, matching wknd.site (Asar → Georgia serif fallback) */
 main:has(> .section.sidebar) .default-content-wrapper h1 {
   font-family: asar, georgia, 'Times New Roman', times, serif;
@@ -349,6 +365,23 @@ main:has(> .section.sidebar) > .section.sidebar ul li a:hover {
   text-decoration: underline;
 }
 
+/* Related-article link: bold title on its own line, smaller grey uppercase
+   date beneath (split into .related-title / .related-date in scripts.js). */
+main:has(> .section.sidebar) > .section.sidebar ul li a .related-title {
+  display: block;
+  font-weight: 600;
+}
+
+main:has(> .section.sidebar) > .section.sidebar ul li a .related-date {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #9b9b9b;
+}
+
 /* Neutralize the global yellow-button rule for the sidebar's single-link
    paragraphs (e.g. the "Download PDF" action link) — keep it a plain link. */
 main:has(> .section.sidebar) > .section.sidebar .default-content-wrapper p a[href]:only-child {
@@ -367,7 +400,7 @@ main:has(> .section.sidebar) > .section.sidebar .default-content-wrapper p a[hre
   main:has(> .section.sidebar) {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 300px;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto auto auto;
     column-gap: 72px;
     align-items: start;
     max-width: 1200px;
@@ -375,24 +408,32 @@ main:has(> .section.sidebar) > .section.sidebar .default-content-wrapper p a[hre
     padding: 0 32px;
   }
 
-  /* Article body (first section) + author bio stack in the left column */
-  main:has(> .section.sidebar) > .section:first-of-type {
-    grid-column: 1;
+  /* Full-width lead hero image spanning both columns in the top row */
+  main:has(> .section.sidebar) > .article-hero {
+    grid-column: 1 / -1;
     grid-row: 1;
     margin: 40px 0 0;
   }
 
-  main:has(> .section.sidebar) > .section.cards-author-container {
+  /* Article body (the plain section, not the author card or sidebar) + author
+     bio stack in the left column */
+  main:has(> .section.sidebar) > .section:not(.cards-author-container, .sidebar) {
     grid-column: 1;
     grid-row: 2;
+    margin: 24px 0 0;
+  }
+
+  main:has(> .section.sidebar) > .section.cards-author-container {
+    grid-column: 1;
+    grid-row: 3;
     margin: 24px 0 40px;
   }
 
-  /* Sidebar occupies the right column, aligned to the top */
+  /* Sidebar occupies the right column, starting beside the article body */
   main:has(> .section.sidebar) > .section.sidebar {
     grid-column: 2;
-    grid-row: 1 / span 2;
-    margin: 40px 0;
+    grid-row: 2 / span 2;
+    margin: 24px 0 40px;
   }
 
   /* Grid controls column width — drop the sections' inner max-width/padding
