@@ -240,24 +240,17 @@ main:has(> .section.sidebar) .default-content-wrapper h4 + h3 {
   display: none;
 }
 
-/* Pull-quote: large left-aligned serif quotation on a light grey panel.
-   The source wraps the quote + attribution in one grey box; in EDS the
-   blockquote and its attribution paragraph are adjacent siblings, so style
-   the blockquote as the panel top and merge the following attribution
-   paragraph seamlessly beneath it (no gap between them). */
-
-/* Base pull-quote panel: fully padded grey box, closed on all sides. This is
-   correct for a standalone quote (no attribution). When a text attribution
-   paragraph immediately follows, the rules below open the bottom so the two
-   merge into one seamless panel. */
+/* Pull-quote: left-aligned serif quotation with no background panel, matching
+   wknd.site (the source quote is transparent, not boxed). An optional
+   attribution paragraph immediately follows as plain text. */
 main:has(> .section.sidebar) .default-content-wrapper blockquote {
   margin: 1.2em 0;
-  padding: 24px 14px;
+  padding: 0;
   border: 0;
-  background: #ebebeb;
+  background: none;
   font-family: asar, georgia, 'Times New Roman', times, serif;
   font-weight: 400;
-  font-size: 30px;
+  font-size: 20px;
   line-height: 1.4;
   color: #202020;
   text-align: left;
@@ -269,23 +262,18 @@ main:has(> .section.sidebar) .default-content-wrapper blockquote p {
   margin: 0;
 }
 
-/* When ANY paragraph immediately follows the quote, drop the quote's bottom
-   margin so an attribution panel can butt directly against it. (Nested :has()
-   is invalid in CSS, so we can't test the following paragraph's contents from
-   the blockquote side — the image case is handled on the paragraph side below,
-   where the image paragraph re-establishes its own top spacing.) */
+/* When an attribution paragraph immediately follows the quote, tuck it up
+   against the quote (no big gap between them). */
 main:has(> .section.sidebar) .default-content-wrapper blockquote:has(+ p) {
   margin-bottom: 0;
-  padding-bottom: 8px;
 }
 
-/* Attribution line directly after a pull-quote continues the grey panel.
-   Single-level :has() on the paragraph is valid and lets us exclude image
-   paragraphs, which must not inherit the panel background. */
+/* Attribution line directly after a pull-quote: plain text, no panel. Excludes
+   image paragraphs, which keep their normal spacing. */
 main:has(> .section.sidebar) .default-content-wrapper blockquote + p:not(:has(picture, img)) {
-  margin: 0 0 1.2em;
-  padding: 0 14px 24px;
-  background: #ebebeb;
+  margin: 6px 0 1.2em;
+  padding: 0;
+  background: none;
   font-size: var(--body-font-size-m);
   color: #202020;
 }
