@@ -96,22 +96,34 @@
   color: #ebebeb;
   border-radius: 0;
   text-decoration: none;
-  font-size: 0; /* clip the word label; the glyph is rendered via ::before */
+  font-size: 0; /* clip the word label; the brand icon is rendered via ::before */
   overflow: hidden;
 }
 
-/* first-letter glyph approximating the source brand icons */
+/* Brand icon rendered as a masked SVG glyph so it takes the link's color
+   (white on the dark square). Matched on the title attribute — the authored
+   href is a placeholder ("/"), so href-based matching is unreliable. */
 .cards-author .cards-author-social-link::before {
-  font-family: var(--body-font-family);
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1;
-  text-transform: lowercase;
+  content: "";
+  width: 22px;
+  height: 22px;
+  background-color: currentcolor;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
 }
 
-.cards-author .cards-author-social-link[href*="facebook"]::before { content: "f"; }
-.cards-author .cards-author-social-link[href*="twitter"]::before { content: "t"; }
-.cards-author .cards-author-social-link[href*="insta"]::before { content: "i"; }
+.cards-author .cards-author-social-link[title="Facebook" i]::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.51 1.49-3.9 3.78-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.9h-2.34V22c4.78-.79 8.44-4.94 8.44-9.94z"/></svg>');
+}
+
+.cards-author .cards-author-social-link[title="Twitter" i]::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M23.64 4.94c-.83.37-1.72.62-2.66.73a4.64 4.64 0 0 0 2.04-2.56 9.3 9.3 0 0 1-2.95 1.13 4.64 4.64 0 0 0-7.9 4.23A13.17 13.17 0 0 1 2.6 3.66a4.64 4.64 0 0 0 1.44 6.19 4.6 4.6 0 0 1-2.1-.58v.06a4.64 4.64 0 0 0 3.72 4.55 4.65 4.65 0 0 1-2.09.08 4.64 4.64 0 0 0 4.33 3.22A9.31 9.31 0 0 1 1 19.54a13.13 13.13 0 0 0 7.11 2.08c8.53 0 13.2-7.07 13.2-13.2l-.02-.6a9.4 9.4 0 0 0 2.35-2.4z"/></svg>');
+}
+
+.cards-author .cards-author-social-link[title="Instagram" i]::before {
+  mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.72 3.72 0 0 1-1.38-.9 3.72 3.72 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zm0 4.38a5.3 5.3 0 1 0 0 10.6 5.3 5.3 0 0 0 0-10.6zm0 1.62a3.68 3.68 0 1 1 0 7.36 3.68 3.68 0 0 1 0-7.36zm5.5-2.9a1.24 1.24 0 1 1 0 2.48 1.24 1.24 0 0 1 0-2.48z"/></svg>');
+}
 
 .cards-author .cards-author-social-link:hover,
 .cards-author .cards-author-social-link:focus-visible {
