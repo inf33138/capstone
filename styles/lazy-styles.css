@@ -445,11 +445,12 @@ main:has(> .section.sidebar) > .section.sidebar .default-content-wrapper p a[hre
     margin: 24px 0 40px;
   }
 
-  /* Sidebar occupies the right column, starting beside the article body */
+  /* Sidebar occupies the right column. Its heading is dropped to align with the
+     article H1 title (not the breadcrumb above it), matching wknd.site. */
   main:has(> .section.sidebar) > .section.sidebar {
     grid-column: 2;
     grid-row: 2 / span 2;
-    margin: 24px 0 40px;
+    margin: 69px 0 40px;
   }
 
   /* Grid controls column width — drop the sections' inner max-width/padding
